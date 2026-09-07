@@ -57,20 +57,30 @@
 /* Print Document Formatting */
 @media print {
   @page {
-    margin: 1.2cm;
+    margin: 10mm 12mm;
     size: A4 portrait;
   }
 
-  body {
+  html,
+  body,
+  #root,
+  #root > div {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
     background: #ffffff !important;
-    color: #0f172a !important;
-    font-size: 11pt;
+    color: #000000 !important;
+    font-size: 10pt !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* Hide interactive app UI elements during print */
+  /* Hide interactive app UI elements & main application screen during print */
   .no-print,
   nav,
-  header.app-header,
+  header,
+  main,
   footer,
   .floating-action-button,
   .bottom-nav-bar,
@@ -79,18 +89,39 @@
     display: none !important;
   }
 
+  /* Reset modal overlay container for clean print flow */
+  .print-modal-container {
+    position: static !important;
+    inset: auto !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+    overflow: visible !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
   /* Force display of printable document container */
   .printable-document {
     display: block !important;
     position: static !important;
     width: 100% !important;
+    max-width: 100% !important;
     box-shadow: none !important;
+    border: none !important;
     padding: 0 !important;
     margin: 0 !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
   }
 
   .print-break-inside-avoid {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 }
+

@@ -18,8 +18,10 @@ import {
   HardDrive,
   ShieldCheck,
   Save,
-  Globe
+  Globe,
+  RefreshCw
 } from 'lucide-react';
+
 
 interface SettingsScreenProps {
   settings: ClinicSettings;
@@ -45,9 +47,30 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   const [formData, setFormData] = useState<ClinicSettings>(settings);
   const [savedFeedback, setSavedFeedback] = useState(false);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [isCheckingUpdate, setIsCheckingUpdate] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
+
+  const handleCheckUpdate = async () => {
+    setIsCheckingUpdate(true);
+    try {
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        for (const reg of registrations) {
+          await reg.update();
+        }
+      }
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map((name) => caches.delete(name)));
+      }
+    } catch (err) {
+      console.error('Failed to update app cache', err);
+    } finally {
+      window.location.reload();
+    }
+  };
 
   const handleFormChange = (key: keyof ClinicSettings, val: string) => {
     setFormData((prev) => ({ ...prev, [key]: val }));
@@ -82,9 +105,23 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     <div className="h-full flex flex-col min-h-0 overflow-hidden space-y-2.5">
       {/* Top Header Bar */}
       <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-[#F2F2F7] shadow-2xs shrink-0 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <Settings className="w-4 h-4 text-[#007AFF]" />
-          <span className="text-sm font-bold text-[#1C1C1E]">Settings</span>
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            <Settings className="w-4 h-4 text-[#007AFF]" />
+            <span className="text-sm font-bold text-[#1C1C1E]">Settings</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleCheckUpdate}
+            disabled={isCheckingUpdate}
+            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#007AFF] bg-[#007AFF]/10 hover:bg-[#007AFF]/20 active:scale-95 disabled:opacity-60 rounded-lg transition cursor-pointer shrink-0"
+            title="Check for app updates & apply newest code changes"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isCheckingUpdate ? 'animate-spin' : ''}`} />
+            <span>{isCheckingUpdate ? 'Updating...' : 'Update App'}</span>
+          </button>
+
           {savedFeedback && (
             <span className="text-xs text-[#34C759] font-semibold flex items-center gap-1">
               <CheckCircle2 className="w-3.5 h-3.5" /> Saved
@@ -101,6 +138,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <span>Save</span>
         </button>
       </div>
+
 
       {/* Settings Form & Sections in bounded scrollable area */}
       <div className="flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-0.5">

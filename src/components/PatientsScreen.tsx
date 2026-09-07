@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Appointment, Patient } from '../types';
+import { Appointment, Patient, PrintType } from '../types';
 import { formatFriendlyDate, formatTimeDisplay } from '../utils/date';
 import {
   Users,
@@ -25,8 +25,9 @@ interface PatientsScreenProps {
   onBookAppointment: (patient: Patient) => void;
   onSavePatient: (patient: Patient) => void;
   onDeletePatient: (id: string, name: string) => void;
-  onOpenPrint: (type: 'patients') => void;
+  onOpenPrint: (type: PrintType, patient?: Patient) => void;
 }
+
 
 export const PatientsScreen: React.FC<PatientsScreenProps> = ({
   patients,
@@ -275,13 +276,26 @@ export const PatientsScreen: React.FC<PatientsScreenProps> = ({
                   {selectedPatientForHistory.phone || 'No phone recorded'}
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => setSelectedPatientForHistory(null)}
-                className="p-2 text-[#8E8E93] hover:text-[#1C1C1E] rounded-xl"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={() => onOpenPrint('patient-history', selectedPatientForHistory)}
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold text-[#007AFF] bg-[#007AFF]/10 hover:bg-[#007AFF]/20 rounded-xl transition cursor-pointer"
+                  title="Print Patient Medical History"
+                >
+                  <Printer className="w-3.5 h-3.5" />
+                  <span>Print History</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedPatientForHistory(null)}
+                  className="p-2 text-[#8E8E93] hover:text-[#1C1C1E] rounded-xl"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
             </div>
 
             <div className="flex-1 overflow-y-auto p-5 space-y-3">

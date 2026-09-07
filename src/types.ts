@@ -38,8 +38,11 @@ export interface ClinicSettings {
 
 export type ScreenTab = 'today' | 'upcoming' | 'patients' | 'settings';
 
+export type PrintType = 'today' | 'upcoming' | 'patients' | 'patient-history';
+
 export interface PrintReportConfig {
-  type: 'today' | 'upcoming' | 'patients';
+  type: PrintType;
   date?: string;
   title: string;
 }
+

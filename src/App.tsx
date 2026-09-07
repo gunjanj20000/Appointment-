@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Appointment, AppointmentStatus, ClinicSettings, Patient, ScreenTab } from './types';
+import { Appointment, AppointmentStatus, ClinicSettings, Patient, ScreenTab, PrintType } from './types';
 import { dbService } from './services/db';
 import { Navigation } from './components/Navigation';
 import { TodayScreen } from './components/TodayScreen';
@@ -10,7 +10,7 @@ import { AppointmentFormPage } from './components/AppointmentFormPage';
 import { PrintDocumentView } from './components/PrintDocumentView';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { getTodayDateString } from './utils/date';
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<ScreenTab>('today');
@@ -38,7 +38,8 @@ export default function App() {
 
   // Print Document View State
   const [isPrintOpen, setIsPrintOpen] = useState(false);
-  const [printType, setPrintType] = useState<'today' | 'upcoming' | 'patients'>('today');
+  const [printType, setPrintType] = useState<PrintType>('today');
+  const [printPatient, setPrintPatient] = useState<Patient | null>(null);
 
   // Delete Confirmation State
   const [deleteModal, setDeleteModal] = useState<{
@@ -229,8 +230,9 @@ export default function App() {
     });
   };
 
-  const handleOpenPrint = (type: 'today' | 'upcoming' | 'patients') => {
+  const handleOpenPrint = (type: PrintType, patient?: Patient) => {
     setPrintType(type);
+    setPrintPatient(patient || null);
     setIsPrintOpen(true);
   };
 
@@ -244,7 +246,7 @@ export default function App() {
     <div className="h-[100dvh] max-h-[100dvh] bg-[#F0F2F5] text-[#1C1C1E] flex flex-col overflow-hidden selection:bg-[#007AFF] selection:text-white">
       {/* Toast Banner */}
       {toastMessage && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#1C1C1E] text-white px-3 py-1.5 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2 animate-in fade-in slide-in-from-top-3 duration-200 border border-[#F2F2F7]/10">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#1C1C1E] text-white px-3 py-1.5 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2 animate-in fade-in slide-in-from-top-3 duration-200 border border-[#F2F2F7]/10 no-print">
           <CheckCircle2 className="w-3.5 h-3.5 text-[#34C759] shrink-0" />
           <span>{toastMessage}</span>
         </div>
@@ -258,8 +260,8 @@ export default function App() {
         waitingTodayCount={waitingTodayCount}
       />
 
-      {/* Main Content Viewport - strictly viewport bounded */}
-      <main className="flex-1 min-h-0 w-full max-w-5xl mx-auto px-2.5 sm:px-4 pt-2 pb-safe-nav md:pb-3 overflow-hidden">
+      {/* Main Content Viewport - strictly viewport bounded, hidden during printing */}
+      <main className="no-print flex-1 min-h-0 w-full max-w-5xl mx-auto px-2.5 sm:px-4 pt-2 pb-safe-nav md:pb-3 overflow-hidden">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center min-h-[50vh]">
             <div className="w-10 h-10 border-3 border-[#007AFF] border-t-transparent rounded-full animate-spin" />
@@ -274,7 +276,7 @@ export default function App() {
                 onDelete={handleDeleteAppointmentRequest}
                 onStatusChange={handleStatusChange}
                 onNewAppointment={handleOpenNewAppointment}
-                onOpenPrint={handleOpenPrint}
+                onOpenPrint={() => handleOpenPrint('today')}
               />
             )}
 
@@ -285,7 +287,7 @@ export default function App() {
                 onDelete={handleDeleteAppointmentRequest}
                 onStatusChange={handleStatusChange}
                 onNewAppointment={handleOpenNewAppointment}
-                onOpenPrint={handleOpenPrint}
+                onOpenPrint={() => handleOpenPrint('upcoming')}
               />
             )}
 
@@ -296,7 +298,7 @@ export default function App() {
                 onBookAppointment={handleBookForPatient}
                 onSavePatient={handleSavePatient}
                 onDeletePatient={handleDeletePatientRequest}
-                onOpenPrint={handleOpenPrint}
+                onOpenPrint={(type, patient) => handleOpenPrint(type, patient)}
               />
             )}
 
@@ -316,7 +318,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Full-Screen Page for Add / Edit Appointment (True full-screen page, not a popup) */}
+      {/* Full-Screen Page for Add / Edit Appointment */}
       <AppointmentFormPage
         isOpen={isFormOpen}
         appointmentToEdit={appointmentToEdit}
@@ -336,14 +338,29 @@ export default function App() {
         type={printType}
         appointments={
           printType === 'today'
-            ? appointments.filter((a) => a.date === todayStr)
+            ? appointments
+                .filter((a) => a.date === todayStr)
+                .sort((a, b) => (a.queueNumber || '').localeCompare(b.queueNumber || '') || (a.time || '').localeCompare(b.time || ''))
+            : printType === 'upcoming'
+            ? appointments
+                .filter((a) => a.date > todayStr)
+                .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''))
+            : printType === 'patient-history' && printPatient
+            ? appointments
+                .filter((a) => a.patientName.trim().toLowerCase() === printPatient.name.trim().toLowerCase())
+                .sort((a, b) => b.date.localeCompare(a.date))
             : appointments
         }
-        patients={patients}
+        patients={[...patients].sort((a, b) => a.name.localeCompare(b.name))}
         settings={settings}
         selectedDate={todayStr}
-        onClose={() => setIsPrintOpen(false)}
+        selectedPatient={printPatient}
+        onClose={() => {
+          setIsPrintOpen(false);
+          setPrintPatient(null);
+        }}
       />
+
 
       {/* Delete Confirmation Dialog */}
       <DeleteConfirmModal

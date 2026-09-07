@@ -1,15 +1,16 @@
 import React from 'react';
-import { Appointment, ClinicSettings, Patient } from '../types';
+import { Appointment, ClinicSettings, Patient, PrintType } from '../types';
 import { formatFriendlyDate, formatTimeDisplay } from '../utils/date';
-import { Printer, Share2, X, FileText, CheckCircle2, Clock, Calendar } from 'lucide-react';
+import { Printer, Share2, X, FileText } from 'lucide-react';
 
 interface PrintDocumentViewProps {
   isOpen: boolean;
-  type: 'today' | 'upcoming' | 'patients';
+  type: PrintType;
   appointments: Appointment[];
   patients: Patient[];
   settings: ClinicSettings;
   selectedDate?: string;
+  selectedPatient?: Patient | null;
   onClose: () => void;
 }
 
@@ -20,6 +21,7 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
   patients,
   settings,
   selectedDate,
+  selectedPatient,
   onClose,
 }) => {
   if (!isOpen) return null;
@@ -29,7 +31,7 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
   };
 
   const handleShare = async () => {
-    if (navigator.share) {
+    if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         let textSummary = `${settings.clinicName || 'Medical Clinic'}\n`;
         if (type === 'today') {
@@ -41,6 +43,11 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
           textSummary += `Upcoming Appointments (${appointments.length} Total)\n\n`;
           appointments.forEach((a) => {
             textSummary += `${a.date}: ${a.patientName} (${a.time || 'No time'}) [${a.status}]\n`;
+          });
+        } else if (type === 'patient-history') {
+          textSummary += `Medical History - ${selectedPatient?.name || 'Patient'}\n\n`;
+          appointments.forEach((a) => {
+            textSummary += `${a.date}: ${a.visitType || 'Visit'} (${a.status}) - ${a.notes || 'No notes'}\n`;
           });
         } else {
           textSummary += `Patient Directory (${patients.length} Registered Patients)\n\n`;
@@ -57,7 +64,6 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
         // User cancelled share or error
       }
     } else {
-      // Fallback: Copy to clipboard or print
       handlePrint();
     }
   };
@@ -70,11 +76,13 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
         return 'Upcoming Appointments Schedule';
       case 'patients':
         return 'Master Patient Directory';
+      case 'patient-history':
+        return `Patient Medical History — ${selectedPatient?.name || 'Patient Record'}`;
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex flex-col justify-start items-center p-2 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex flex-col justify-start items-center p-2 sm:p-6 overflow-y-auto print-modal-container">
       {/* Top action header (hidden during printing via .no-print) */}
       <div className="no-print w-full max-w-4xl mb-4 bg-white rounded-2xl px-5 py-3.5 shadow-xl border border-[#F2F2F7] flex items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-2">
@@ -149,34 +157,50 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-[#1C1C1E]">{getDocTitle()}</h2>
-            <p className="text-xs text-[#8E8E93]">
-              {type === 'patients'
-                ? `Total Registered Patients: ${patients.length}`
-                : `Total Appointments: ${appointments.length}`}
-            </p>
+            {type === 'patient-history' && selectedPatient ? (
+              <p className="text-xs text-[#8E8E93] mt-0.5">
+                {selectedPatient.age ? `Age: ${selectedPatient.age} yrs • ` : ''}
+                {selectedPatient.phone ? `Phone: ${selectedPatient.phone} • ` : ''}
+                Total Visits: {appointments.length}
+              </p>
+            ) : (
+              <p className="text-xs text-[#8E8E93]">
+                {type === 'patients'
+                  ? `Total Registered Patients: ${patients.length}`
+                  : `Total Appointments: ${appointments.length}`}
+              </p>
+            )}
           </div>
         </div>
 
         {/* Data Tables */}
-        {type === 'today' || type === 'upcoming' ? (
+        {type === 'today' || type === 'upcoming' || type === 'patient-history' ? (
           <div>
             {appointments.length === 0 ? (
               <div className="p-8 text-center text-[#8E8E93] border border-dashed border-[#E5E5EA] rounded-xl">
-                No appointments found for this period.
+                No appointment records found for this report.
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
                     <tr className="border-b-2 border-[#E5E5EA] bg-[#F2F2F7]">
-                      <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Queue</th>
-                      {type === 'upcoming' && <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Date</th>}
+                      <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">
+                        {type === 'today' ? 'Queue' : '#'}
+                      </th>
+                      {(type === 'upcoming' || type === 'patient-history') && (
+                        <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Date</th>
+                      )}
                       <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Time</th>
-                      <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Patient Name</th>
-                      <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Age / Phone</th>
+                      {type !== 'patient-history' && (
+                        <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Patient Name</th>
+                      )}
+                      {type !== 'patient-history' && (
+                        <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Age / Phone</th>
+                      )}
                       <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Visit Type</th>
                       <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Status</th>
-                      <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Notes</th>
+                      <th className="py-2.5 px-3 font-semibold text-[#1C1C1E]">Clinical Notes</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E5EA]">
@@ -185,21 +209,25 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
                         <td className="py-2.5 px-3 font-bold text-[#1C1C1E]">
                           {a.queueNumber ? `#${a.queueNumber}` : String(idx + 1).padStart(2, '0')}
                         </td>
-                        {type === 'upcoming' && (
+                        {(type === 'upcoming' || type === 'patient-history') && (
                           <td className="py-2.5 px-3 font-medium text-[#1C1C1E] whitespace-nowrap">
-                            {a.date}
+                            {formatFriendlyDate(a.date)}
                           </td>
                         )}
                         <td className="py-2.5 px-3 font-medium text-[#1C1C1E] whitespace-nowrap">
                           {a.time ? formatTimeDisplay(a.time) : '—'}
                         </td>
-                        <td className="py-2.5 px-3 font-bold text-[#1C1C1E]">
-                          {a.patientName}
-                        </td>
-                        <td className="py-2.5 px-3 text-[#8E8E93]">
-                          {a.age ? `${a.age}y` : ''} {a.phone ? `(${a.phone})` : ''}
-                          {!a.age && !a.phone && '—'}
-                        </td>
+                        {type !== 'patient-history' && (
+                          <td className="py-2.5 px-3 font-bold text-[#1C1C1E]">
+                            {a.patientName}
+                          </td>
+                        )}
+                        {type !== 'patient-history' && (
+                          <td className="py-2.5 px-3 text-[#8E8E93]">
+                            {a.age ? `${a.age}y` : ''} {a.phone ? `(${a.phone})` : ''}
+                            {!a.age && !a.phone && '—'}
+                          </td>
+                        )}
                         <td className="py-2.5 px-3 text-[#1C1C1E]">
                           {a.visitType || 'General'}
                         </td>
@@ -216,7 +244,7 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
                             {a.status}
                           </span>
                         </td>
-                        <td className="py-2.5 px-3 text-[#8E8E93] max-w-xs truncate">
+                        <td className="py-2.5 px-3 text-[#8E8E93] max-w-xs">
                           {a.notes || '—'}
                         </td>
                       </tr>
@@ -274,3 +302,4 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
     </div>
   );
 };
+
