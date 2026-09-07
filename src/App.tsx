@@ -9,8 +9,10 @@ import { SettingsScreen } from './components/SettingsScreen';
 import { AppointmentFormPage } from './components/AppointmentFormPage';
 import { PrintDocumentView } from './components/PrintDocumentView';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { getTodayDateString } from './utils/date';
 import { CheckCircle2 } from 'lucide-react';
+
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<ScreenTab>('today');
@@ -333,33 +335,45 @@ export default function App() {
       />
 
       {/* Printable / PDF Export Sheet */}
-      <PrintDocumentView
-        isOpen={isPrintOpen}
-        type={printType}
-        appointments={
-          printType === 'today'
-            ? appointments
-                .filter((a) => a.date === todayStr)
-                .sort((a, b) => (a.queueNumber || '').localeCompare(b.queueNumber || '') || (a.time || '').localeCompare(b.time || ''))
-            : printType === 'upcoming'
-            ? appointments
-                .filter((a) => a.date > todayStr)
-                .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || ''))
-            : printType === 'patient-history' && printPatient
-            ? appointments
-                .filter((a) => a.patientName.trim().toLowerCase() === printPatient.name.trim().toLowerCase())
-                .sort((a, b) => b.date.localeCompare(a.date))
-            : appointments
-        }
-        patients={[...patients].sort((a, b) => a.name.localeCompare(b.name))}
-        settings={settings}
-        selectedDate={todayStr}
-        selectedPatient={printPatient}
-        onClose={() => {
-          setIsPrintOpen(false);
-          setPrintPatient(null);
-        }}
-      />
+      <ErrorBoundary fallbackTitle="Unable to display print document view.">
+        <PrintDocumentView
+          isOpen={isPrintOpen}
+          type={printType}
+          appointments={
+            printType === 'today'
+              ? appointments
+                  .filter((a) => a && a.date === todayStr)
+                  .sort((a, b) => (a.queueNumber || '').localeCompare(b.queueNumber || '') || (a.time || '').localeCompare(b.time || ''))
+              : printType === 'upcoming'
+              ? appointments
+                  .filter((a) => a && a.date > todayStr)
+                  .sort((a, b) => (a.date || '').localeCompare(b.date || '') || (a.time || '').localeCompare(b.time || ''))
+              : printType === 'patient-history' && printPatient && printPatient.name
+              ? appointments
+                  .filter(
+                    (a) =>
+                      a &&
+                      a.patientName &&
+                      a.patientName.trim().toLowerCase() === printPatient.name.trim().toLowerCase()
+                  )
+                  .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+              : appointments
+          }
+          patients={
+            Array.isArray(patients)
+              ? [...patients].sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+              : []
+          }
+          settings={settings}
+          selectedDate={todayStr}
+          selectedPatient={printPatient}
+          onClose={() => {
+            setIsPrintOpen(false);
+            setPrintPatient(null);
+          }}
+        />
+      </ErrorBoundary>
+
 
 
       {/* Delete Confirmation Dialog */}

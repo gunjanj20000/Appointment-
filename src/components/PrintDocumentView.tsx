@@ -6,9 +6,9 @@ import { Printer, Share2, X, FileText } from 'lucide-react';
 interface PrintDocumentViewProps {
   isOpen: boolean;
   type: PrintType;
-  appointments: Appointment[];
-  patients: Patient[];
-  settings: ClinicSettings;
+  appointments?: Appointment[];
+  patients?: Patient[];
+  settings?: ClinicSettings;
   selectedDate?: string;
   selectedPatient?: Patient | null;
   onClose: () => void;
@@ -16,48 +16,71 @@ interface PrintDocumentViewProps {
 
 export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
   isOpen,
-  type,
-  appointments,
-  patients,
-  settings,
-  selectedDate,
-  selectedPatient,
+  type = 'today',
+  appointments = [],
+  patients = [],
+  settings = {
+    id: 'clinic_settings',
+    clinicName: 'Medical Clinic',
+    doctorName: 'Attending Physician',
+    specialty: 'General Practice',
+    phone: '',
+    address: '',
+    printFooterNote: 'CONFIDENTIAL MEDICAL RECORD • FOR OFFICIAL USE ONLY',
+  },
+  selectedDate = '',
+  selectedPatient = null,
   onClose,
 }) => {
   if (!isOpen) return null;
 
+  const safeAppts = Array.isArray(appointments) ? appointments : [];
+  const safePats = Array.isArray(patients) ? patients : [];
+  const safeSettings = settings || {
+    clinicName: 'Medical Clinic',
+    doctorName: 'Attending Physician',
+    specialty: '',
+    phone: '',
+    address: '',
+    printFooterNote: '',
+  };
+
   const handlePrint = () => {
-    window.print();
+    try {
+      window.print();
+    } catch (err) {
+      console.error('Failed to trigger window.print()', err);
+    }
   };
 
   const handleShare = async () => {
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
-        let textSummary = `${settings.clinicName || 'Medical Clinic'}\n`;
+        let textSummary = `${safeSettings.clinicName || 'Medical Clinic'}\n`;
         if (type === 'today') {
-          textSummary += `Today's Appointments (${appointments.length} Total)\n\n`;
-          appointments.forEach((a) => {
-            textSummary += `#${a.queueNumber || '-'} ${a.patientName} (${a.time || 'No time'}) - Status: ${a.status}\n`;
+          textSummary += `Today's Appointments (${safeAppts.length} Total)\n\n`;
+          safeAppts.forEach((a) => {
+            textSummary += `#${a.queueNumber || '-'} ${a.patientName || 'Patient'} (${a.time || 'No time'}) - Status: ${a.status}\n`;
           });
         } else if (type === 'upcoming') {
-          textSummary += `Upcoming Appointments (${appointments.length} Total)\n\n`;
-          appointments.forEach((a) => {
-            textSummary += `${a.date}: ${a.patientName} (${a.time || 'No time'}) [${a.status}]\n`;
+          textSummary += `Upcoming Appointments (${safeAppts.length} Total)\n\n`;
+          safeAppts.forEach((a) => {
+            textSummary += `${a.date}: ${a.patientName || 'Patient'} (${a.time || 'No time'}) [${a.status}]\n`;
           });
         } else if (type === 'patient-history') {
           textSummary += `Medical History - ${selectedPatient?.name || 'Patient'}\n\n`;
-          appointments.forEach((a) => {
+          safeAppts.forEach((a) => {
             textSummary += `${a.date}: ${a.visitType || 'Visit'} (${a.status}) - ${a.notes || 'No notes'}\n`;
           });
         } else {
-          textSummary += `Patient Directory (${patients.length} Registered Patients)\n\n`;
-          patients.forEach((p) => {
-            textSummary += `${p.name} - Phone: ${p.phone || 'N/A'}\n`;
+          textSummary += `Patient Directory (${safePats.length} Registered Patients)\n\n`;
+          safePats.forEach((p) => {
+            textSummary += `${p.name || 'Patient'} - Phone: ${p.phone || 'N/A'}\n`;
           });
         }
 
         await navigator.share({
-          title: `${settings.clinicName || 'Medical Organizer'} - Report`,
+          title: `${safeSettings.clinicName || 'Medical Organizer'} - Report`,
           text: textSummary,
         });
       } catch {
@@ -78,6 +101,8 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
         return 'Master Patient Directory';
       case 'patient-history':
         return `Patient Medical History — ${selectedPatient?.name || 'Patient Record'}`;
+      default:
+        return 'Medical Clinic Report';
     }
   };
 
@@ -129,16 +154,16 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
         <div className="border-b-2 border-[#1C1C1E] pb-6 mb-6 flex flex-col sm:flex-row justify-between items-start gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-[#1C1C1E]">
-              {settings.clinicName || 'Medical Clinic'}
+              {safeSettings.clinicName || 'Medical Clinic'}
             </h1>
             <p className="text-sm font-semibold text-[#007AFF] mt-0.5">
-              {settings.doctorName || 'Attending Physician'}
-              {settings.specialty ? ` • ${settings.specialty}` : ''}
+              {safeSettings.doctorName || 'Attending Physician'}
+              {safeSettings.specialty ? ` • ${safeSettings.specialty}` : ''}
             </p>
-            {(settings.phone || settings.address) && (
+            {(safeSettings.phone || safeSettings.address) && (
               <p className="text-xs text-[#8E8E93] mt-1">
-                {settings.phone ? `Phone: ${settings.phone} ` : ''}
-                {settings.address ? `• ${settings.address}` : ''}
+                {safeSettings.phone ? `Phone: ${safeSettings.phone} ` : ''}
+                {safeSettings.address ? `• ${safeSettings.address}` : ''}
               </p>
             )}
           </div>
@@ -161,13 +186,13 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
               <p className="text-xs text-[#8E8E93] mt-0.5">
                 {selectedPatient.age ? `Age: ${selectedPatient.age} yrs • ` : ''}
                 {selectedPatient.phone ? `Phone: ${selectedPatient.phone} • ` : ''}
-                Total Visits: {appointments.length}
+                Total Visits: {safeAppts.length}
               </p>
             ) : (
               <p className="text-xs text-[#8E8E93]">
                 {type === 'patients'
-                  ? `Total Registered Patients: ${patients.length}`
-                  : `Total Appointments: ${appointments.length}`}
+                  ? `Total Registered Patients: ${safePats.length}`
+                  : `Total Appointments: ${safeAppts.length}`}
               </p>
             )}
           </div>
@@ -176,7 +201,7 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
         {/* Data Tables */}
         {type === 'today' || type === 'upcoming' || type === 'patient-history' ? (
           <div>
-            {appointments.length === 0 ? (
+            {safeAppts.length === 0 ? (
               <div className="p-8 text-center text-[#8E8E93] border border-dashed border-[#E5E5EA] rounded-xl">
                 No appointment records found for this report.
               </div>
@@ -204,14 +229,14 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E5EA]">
-                    {appointments.map((a, idx) => (
-                      <tr key={a.id} className="print-break-inside-avoid hover:bg-[#F2F2F7]/50">
+                    {safeAppts.map((a, idx) => (
+                      <tr key={a.id || idx} className="print-break-inside-avoid hover:bg-[#F2F2F7]/50">
                         <td className="py-2.5 px-3 font-bold text-[#1C1C1E]">
                           {a.queueNumber ? `#${a.queueNumber}` : String(idx + 1).padStart(2, '0')}
                         </td>
                         {(type === 'upcoming' || type === 'patient-history') && (
                           <td className="py-2.5 px-3 font-medium text-[#1C1C1E] whitespace-nowrap">
-                            {formatFriendlyDate(a.date)}
+                            {formatFriendlyDate(a.date || '')}
                           </td>
                         )}
                         <td className="py-2.5 px-3 font-medium text-[#1C1C1E] whitespace-nowrap">
@@ -219,7 +244,7 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
                         </td>
                         {type !== 'patient-history' && (
                           <td className="py-2.5 px-3 font-bold text-[#1C1C1E]">
-                            {a.patientName}
+                            {a.patientName || 'Unnamed Patient'}
                           </td>
                         )}
                         {type !== 'patient-history' && (
@@ -241,7 +266,7 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
                                 : 'bg-[#FFF9EB] text-[#FF9500]'
                             }`}
                           >
-                            {a.status}
+                            {a.status || 'Waiting'}
                           </span>
                         </td>
                         <td className="py-2.5 px-3 text-[#8E8E93] max-w-xs">
@@ -257,7 +282,7 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
         ) : (
           /* Patients Directory */
           <div>
-            {patients.length === 0 ? (
+            {safePats.length === 0 ? (
               <div className="p-8 text-center text-[#8E8E93] border border-dashed border-[#E5E5EA] rounded-xl">
                 No patient records in database.
               </div>
@@ -275,14 +300,16 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E5EA]">
-                    {patients.map((p, idx) => (
-                      <tr key={p.id} className="print-break-inside-avoid hover:bg-[#F2F2F7]/50">
+                    {safePats.map((p, idx) => (
+                      <tr key={p.id || idx} className="print-break-inside-avoid hover:bg-[#F2F2F7]/50">
                         <td className="py-2.5 px-3 font-medium text-[#8E8E93]">{idx + 1}</td>
-                        <td className="py-2.5 px-3 font-bold text-[#1C1C1E]">{p.name}</td>
+                        <td className="py-2.5 px-3 font-bold text-[#1C1C1E]">{p.name || 'Unnamed'}</td>
                         <td className="py-2.5 px-3 text-[#1C1C1E]">{p.age ? `${p.age} yrs` : '—'}</td>
                         <td className="py-2.5 px-3 font-medium text-[#1C1C1E]">{p.phone || '—'}</td>
                         <td className="py-2.5 px-3 text-[#8E8E93] whitespace-nowrap">
-                          {new Date(p.createdAt).toLocaleDateString()}
+                          {p.createdAt && !isNaN(new Date(p.createdAt).getTime())
+                            ? new Date(p.createdAt).toLocaleDateString()
+                            : '—'}
                         </td>
                         <td className="py-2.5 px-3 text-[#8E8E93] max-w-sm truncate">{p.notes || '—'}</td>
                       </tr>
@@ -296,10 +323,9 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
 
         {/* Footer */}
         <div className="mt-12 pt-6 border-t border-[#E5E5EA] text-center text-xs text-[#8E8E93]">
-          <p>{settings.printFooterNote || 'CONFIDENTIAL MEDICAL RECORD • FOR AUTHORIZED CLINICAL USE ONLY'}</p>
+          <p>{safeSettings.printFooterNote || 'CONFIDENTIAL MEDICAL RECORD • FOR AUTHORIZED CLINICAL USE ONLY'}</p>
         </div>
       </div>
     </div>
   );
 };
-
