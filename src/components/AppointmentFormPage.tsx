@@ -196,7 +196,7 @@ export const AppointmentFormPage: React.FC<AppointmentFormPageProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#F0F2F5] flex flex-col overflow-hidden text-[#1C1C1E] animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 bg-[#F0F2F5] flex flex-col overflow-hidden text-[#1C1C1E] animate-in fade-in duration-150 no-print">
       {/* Top Bar Header */}
       <header className="bg-white border-b border-[#F2F2F7] pt-safe px-3 py-2 shrink-0 shadow-2xs">
         <div className="max-w-2xl mx-auto flex items-center justify-between gap-2">
