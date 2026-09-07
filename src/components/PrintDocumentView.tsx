@@ -173,8 +173,9 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
               Official Medical Report
             </span>
             <p className="text-xs text-[#8E8E93] mt-1.5">
-              Generated on: {new Date().toLocaleDateString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
+              Generated on: {new Date().toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })}
             </p>
+
           </div>
         </div>
 
