@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" class="h-full bg-[#F0F2F5] text-[#1C1C1E] antialiased selection:bg-[#007AFF] selection:text-white">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Medical Appointment Organizer</title>
+    <meta name="description" content="Mobile-first offline PWA for organizing medical appointments, queue management, and patient records with IndexedDB." />
+    
+    <!-- PWA & Mobile Web App Meta -->
+    <meta name="theme-color" content="#007AFF" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Appointments" />
+    <meta name="format-detection" content="telephone=no" />
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Medical Appointment Organizer" />
+    <meta property="og:description" content="Mobile-first offline PWA for organizing medical appointments, queue management, and patient records with IndexedDB." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Plus Jakarta Sans for clean clinical readability and aesthetic polish -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+  </head>
+  <body class="h-full bg-[#F0F2F5] font-sans text-[#1C1C1E] overflow-x-hidden">
+    <div id="root" class="h-full min-h-screen"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

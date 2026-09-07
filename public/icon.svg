@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="medGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d9488" />
+      <stop offset="100%" stop-color="#0f766e" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#medGrad)" />
+  <!-- Medical Cross -->
+  <g filter="url(#shadow)">
+    <!-- Vertical Bar with rounded ends -->
+    <rect x="206" y="96" width="100" height="320" rx="30" fill="#ffffff" />
+    <!-- Horizontal Bar with rounded ends -->
+    <rect x="96" y="206" width="320" height="100" rx="30" fill="#ffffff" />
+  </g>
+  <!-- Stethoscope / Pulse Accent in center -->
+  <path d="M190 256h25l15-28 22 56 18-36 12 8h40" fill="none" stroke="#0d9488" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

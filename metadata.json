@@ -1,0 +1,6 @@
+{
+  "name": "Medical Appointment Organizer",
+  "description": "Mobile-first offline PWA for organizing medical appointments, queue management, and patient records with IndexedDB.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
