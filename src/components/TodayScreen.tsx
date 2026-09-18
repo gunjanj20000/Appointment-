@@ -131,7 +131,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
           </div>
         </div>
 
-        {/* Right: Search + Print + Add */}
+        {/* Right: Search + Print */}
         <div className="flex items-center gap-2">
           <div className="relative flex-1 sm:w-48">
             <input
@@ -161,15 +161,6 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
             title="Print roster"
           >
             <Printer className="w-3.5 h-3.5 text-[#8E8E93]" />
-          </button>
-
-          <button
-            type="button"
-            onClick={() => onNewAppointment(todayStr)}
-            className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-[#007AFF] hover:bg-[#0066D6] active:scale-95 rounded-lg shadow-2xs transition cursor-pointer min-h-[32px] shrink-0"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            <span>Add</span>
           </button>
         </div>
       </div>
