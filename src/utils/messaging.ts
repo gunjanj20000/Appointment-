@@ -101,15 +101,16 @@ export function renderMessageTemplate(
 
 /**
  * Format phone number to clean digits for WhatsApp.
+ * Always defaults country code to 91 (India) unless changed by operator.
  * Handles +, 00, local trunk 0, or prepends default country code if missing.
  */
-export function formatPhoneForWhatsApp(phone: string, defaultCountryCode: string = '+1'): string {
+export function formatPhoneForWhatsApp(phone: string, defaultCountryCode: string = '+91'): string {
   if (!phone) return '';
   const trimmed = phone.trim();
   const digitsOnly = trimmed.replace(/\D/g, '');
   if (!digitsOnly) return '';
 
-  const cleanCountry = defaultCountryCode.replace(/\D/g, '');
+  const cleanCountry = (defaultCountryCode || '+91').replace(/\D/g, '') || '91';
 
   if (trimmed.startsWith('+')) {
     return digitsOnly;
@@ -118,14 +119,24 @@ export function formatPhoneForWhatsApp(phone: string, defaultCountryCode: string
     return digitsOnly.substring(2);
   }
 
-  // Common local formatting: 10-digit number (e.g. US, India, etc.)
+  // If already starts with the country code (e.g. 12 digits starting with 91)
+  if (digitsOnly.length === 12 && digitsOnly.startsWith(cleanCountry)) {
+    return digitsOnly;
+  }
+
+  // Common local 10-digit number (e.g. standard 10-digit mobile number)
   if (digitsOnly.length === 10 && cleanCountry) {
     return cleanCountry + digitsOnly;
   }
 
-  // Local number with leading trunk zero (e.g. UK 07xxx -> 447xxx)
+  // Local number with leading trunk zero (e.g. 09876543210 -> 919876543210)
   if (digitsOnly.startsWith('0') && cleanCountry) {
     return cleanCountry + digitsOnly.substring(1);
+  }
+
+  // If number does not start with country code, prefix it
+  if (!digitsOnly.startsWith(cleanCountry) && cleanCountry) {
+    return cleanCountry + digitsOnly;
   }
 
   return digitsOnly;
@@ -133,14 +144,33 @@ export function formatPhoneForWhatsApp(phone: string, defaultCountryCode: string
 
 /**
  * Format phone number for SMS URI.
+ * Always defaults country code to +91 unless changed by operator.
  */
-export function formatPhoneForSms(phone: string): string {
+export function formatPhoneForSms(phone: string, defaultCountryCode: string = '+91'): string {
   if (!phone) return '';
-  // Preserve leading plus if present for international SMS
   const trimmed = phone.trim();
   const hasPlus = trimmed.startsWith('+');
   const digits = trimmed.replace(/\D/g, '');
-  return hasPlus ? `+${digits}` : digits;
+  if (!digits) return '';
+
+  const cleanCountry = (defaultCountryCode || '+91').replace(/\D/g, '') || '91';
+
+  if (hasPlus) {
+    return `+${digits}`;
+  }
+  if (trimmed.startsWith('00')) {
+    return `+${digits.substring(2)}`;
+  }
+  if (digits.length === 10 && cleanCountry) {
+    return `+${cleanCountry}${digits}`;
+  }
+  if (digits.startsWith('0') && cleanCountry) {
+    return `+${cleanCountry}${digits.substring(1)}`;
+  }
+  if (digits.startsWith(cleanCountry)) {
+    return `+${digits}`;
+  }
+  return `+${cleanCountry}${digits}`;
 }
 
 /**
@@ -158,8 +188,8 @@ export function createWhatsAppUrl(phone: string, message: string, defaultCountry
 /**
  * Create an SMS URI scheme compatible with mobile and desktop SMS handlers.
  */
-export function createSmsUrl(phone: string, message: string): string {
-  const cleanPhone = formatPhoneForSms(phone);
+export function createSmsUrl(phone: string, message: string, defaultCountryCode?: string): string {
+  const cleanPhone = formatPhoneForSms(phone, defaultCountryCode);
   const encodedText = encodeURIComponent(message);
   const isIOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
   const separator = isIOS ? '&' : '?';

@@ -24,6 +24,7 @@ interface AppointmentFormPageProps {
   initialPatientName?: string;
   initialPhone?: string;
   initialDate?: string;
+  defaultCountryCode?: string;
   existingAppointments: Appointment[];
   existingPatients: Patient[];
   onSave: (appointment: Appointment, notifyAfterSave?: boolean) => void;
@@ -51,6 +52,7 @@ export const AppointmentFormPage: React.FC<AppointmentFormPageProps> = ({
   initialPatientName = '',
   initialPhone = '',
   initialDate = '',
+  defaultCountryCode = '+91',
   existingAppointments,
   existingPatients,
   onSave,
@@ -293,14 +295,17 @@ export const AppointmentFormPage: React.FC<AppointmentFormPageProps> = ({
 
               {/* Phone */}
               <div>
-                <label htmlFor="phone" className="block text-xs font-semibold text-[#1C1C1E] mb-0.5">
-                  Phone Number
-                </label>
+                <div className="flex items-center justify-between mb-0.5">
+                  <label htmlFor="phone" className="block text-xs font-semibold text-[#1C1C1E]">
+                    Phone Number
+                  </label>
+                  <span className="text-[10px] text-[#8E8E93]">Default: {defaultCountryCode}</span>
+                </div>
                 <div className="relative">
                   <input
                     id="phone"
                     type="tel"
-                    placeholder="e.g. +1 (555) 019-2834"
+                    placeholder={`e.g. 98765 43210 or ${defaultCountryCode}...`}
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full pl-7 pr-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden transition text-[#1C1C1E]"

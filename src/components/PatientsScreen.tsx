@@ -426,7 +426,7 @@ export const PatientsScreen: React.FC<PatientsScreenProps> = ({
                   <label className="block text-xs font-semibold text-[#1C1C1E] mb-1">Phone Number</label>
                   <input
                     type="tel"
-                    placeholder="e.g. +1 555-0192"
+                    placeholder="e.g. 98765 43210 or +91..."
                     value={patientModalData.phone || ''}
                     onChange={(e) => setPatientModalData({ ...patientModalData, phone: e.target.value })}
                     className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E]"

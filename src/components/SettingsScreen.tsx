@@ -222,7 +222,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <label className="block text-[11px] font-semibold text-[#8E8E93] mb-0.5">Phone Number</label>
               <input
                 type="text"
-                placeholder="e.g. +1 (555) 234-5678"
+                placeholder="e.g. +91 98765 43210"
                 value={formData.phone}
                 onChange={(e) => handleFormChange('phone', e.target.value)}
                 className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E]"
@@ -262,14 +262,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <div>
             <div className="flex items-center justify-between mb-0.5">
               <label className="block text-[11px] font-semibold text-[#8E8E93]">
-                Default Country Code (for WhatsApp numbers without country code)
+                Default Country Code (for phone numbers without country code)
               </label>
-              <span className="text-[10px] text-[#8E8E93]">e.g. +1 (US/Canada), +91 (India), +44 (UK)</span>
+              <span className="text-[10px] text-[#8E8E93]">Default: +91 (India) • Always used unless changed by operator</span>
             </div>
             <input
               type="text"
-              placeholder="+1"
-              value={formData.defaultCountryCode || '+1'}
+              placeholder="+91"
+              value={formData.defaultCountryCode || '+91'}
               onChange={(e) => handleFormChange('defaultCountryCode', e.target.value)}
               className="w-full sm:w-48 px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E]"
             />

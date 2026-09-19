@@ -111,7 +111,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
 
   // Clean formatted phone for WhatsApp preview
   const whatsAppPhonePreview = useMemo(() => {
-    return formatPhoneForWhatsApp(recipientPhone, settings.defaultCountryCode || '+1');
+    return formatPhoneForWhatsApp(recipientPhone, settings.defaultCountryCode || '+91');
   }, [recipientPhone, settings.defaultCountryCode]);
 
   if (!isOpen || !appointment) return null;
@@ -140,7 +140,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
 
     await handlePhoneSaveIfNeeded();
 
-    const cleanPhone = formatPhoneForWhatsApp(trimmed, settings.defaultCountryCode || '+1');
+    const cleanPhone = formatPhoneForWhatsApp(trimmed, settings.defaultCountryCode || '+91');
     const encoded = encodeURIComponent(messageText);
     const targetUrl = useWeb
       ? `https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encoded}`
@@ -163,7 +163,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
 
     await handlePhoneSaveIfNeeded();
 
-    const url = createSmsUrl(trimmed, messageText);
+    const url = createSmsUrl(trimmed, messageText, settings.defaultCountryCode || '+91');
     // Open native SMS handler
     const a = document.createElement('a');
     a.href = url;
@@ -254,7 +254,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
               </label>
               {whatsAppPhonePreview && (
                 <span className="text-[10px] text-[#8E8E93] font-mono">
-                  WhatsApp digits: +{whatsAppPhonePreview}
+                  Code: {settings.defaultCountryCode || '+91'} • Recipient: +{whatsAppPhonePreview}
                 </span>
               )}
             </div>
@@ -262,7 +262,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
               <input
                 id="modal-patient-phone"
                 type="tel"
-                placeholder="e.g. +1 555-019-2834 or local phone number"
+                placeholder="e.g. 9876543210 or +91 9876543210"
                 value={recipientPhone}
                 onChange={(e) => {
                   setRecipientPhone(e.target.value);

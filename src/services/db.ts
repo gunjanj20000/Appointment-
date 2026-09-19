@@ -224,6 +224,7 @@ export const dbService = {
       phone: '',
       address: '',
       printFooterNote: 'CONFIDENTIAL: For official medical clinic use only.',
+      defaultCountryCode: '+91',
     };
 
     return new Promise((resolve) => {
@@ -232,7 +233,12 @@ export const dbService = {
       const req = store.get('clinic_settings');
       req.onsuccess = () => {
         if (req.result) {
-          resolve({ ...defaultSettings, ...(req.result as ClinicSettings) });
+          const loaded = req.result as ClinicSettings;
+          const countryCode =
+            loaded.defaultCountryCode && loaded.defaultCountryCode !== '+1'
+              ? loaded.defaultCountryCode
+              : '+91';
+          resolve({ ...defaultSettings, ...loaded, defaultCountryCode: countryCode });
         } else {
           resolve(defaultSettings);
         }

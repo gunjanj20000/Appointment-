@@ -27,7 +27,7 @@ export default function App() {
     phone: '',
     address: '',
     printFooterNote: 'CONFIDENTIAL MEDICAL RECORD • FOR OFFICIAL USE ONLY',
-    defaultCountryCode: '+1',
+    defaultCountryCode: '+91',
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -368,6 +368,7 @@ export default function App() {
         initialPatientName={formInitialPatient.name}
         initialPhone={formInitialPatient.phone}
         initialDate={formInitialDate}
+        defaultCountryCode={settings.defaultCountryCode || '+91'}
         existingAppointments={appointments}
         existingPatients={patients}
         onSave={handleSaveAppointment}
