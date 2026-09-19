@@ -11,14 +11,17 @@ import {
   Clock3,
   XCircle,
   FileText,
-  ChevronDown
+  ChevronDown,
+  MessageSquare
 } from 'lucide-react';
+import { WhatsAppIcon } from './icons/WhatsAppIcon';
 
 interface AppointmentCardProps {
   appointment: Appointment;
   onEdit: (appointment: Appointment) => void;
   onDelete: (id: string, patientName: string) => void;
   onStatusChange: (id: string, newStatus: AppointmentStatus) => void;
+  onNotify?: (appointment: Appointment, initialChannel?: 'whatsapp' | 'sms') => void;
   showDate?: boolean;
 }
 
@@ -27,6 +30,7 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
   onEdit,
   onDelete,
   onStatusChange,
+  onNotify,
   showDate = false,
 }) => {
   const [showStatusMenu, setShowStatusMenu] = useState(false);
@@ -81,14 +85,38 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
               </span>
             )}
             {appointment.phone && (
-              <a
-                href={`tel:${appointment.phone}`}
-                className="text-[11px] text-[#007AFF] hover:underline inline-flex items-center gap-0.5"
-                title="Call patient"
-              >
-                <Phone className="w-2.5 h-2.5" />
-                <span>{appointment.phone}</span>
-              </a>
+              <div className="inline-flex items-center gap-1.5 flex-wrap">
+                <a
+                  href={`tel:${appointment.phone}`}
+                  className="text-[11px] text-[#007AFF] hover:underline inline-flex items-center gap-0.5"
+                  title="Call patient"
+                >
+                  <Phone className="w-2.5 h-2.5" />
+                  <span>{appointment.phone}</span>
+                </a>
+                {onNotify && (
+                  <div className="inline-flex items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => onNotify(appointment, 'whatsapp')}
+                      className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#25D366]/10 text-[#1EAA52] hover:bg-[#25D366]/20 transition cursor-pointer"
+                      title="Send WhatsApp message to patient"
+                    >
+                      <WhatsAppIcon className="w-2.5 h-2.5" />
+                      <span>WhatsApp</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onNotify(appointment, 'sms')}
+                      className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-[#007AFF]/10 text-[#007AFF] hover:bg-[#007AFF]/20 transition cursor-pointer"
+                      title="Send SMS message to patient"
+                    >
+                      <MessageSquare className="w-2.5 h-2.5" />
+                      <span>SMS</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
@@ -198,8 +226,18 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
           )}
         </div>
 
-        {/* Edit and Delete Actions */}
+        {/* Message, Edit and Delete Actions */}
         <div className="flex items-center gap-0.5">
+          {onNotify && (
+            <button
+              type="button"
+              onClick={() => onNotify(appointment)}
+              className="p-1.5 text-[#8E8E93] hover:text-[#007AFF] hover:bg-[#007AFF]/10 rounded-lg transition cursor-pointer min-h-[30px] min-w-[30px] flex items-center justify-center"
+              title="Send SMS or WhatsApp message to patient"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+            </button>
+          )}
           <button
             type="button"
             onClick={() => onEdit(appointment)}

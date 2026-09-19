@@ -34,6 +34,11 @@ export interface ClinicSettings {
   phone: string;
   address: string;
   printFooterNote?: string;
+  defaultCountryCode?: string;
+  smsConfirmationTemplate?: string;
+  smsReminderTemplate?: string;
+  smsQueueTemplate?: string;
+  smsCancelledTemplate?: string;
 }
 
 export type ScreenTab = 'today' | 'upcoming' | 'patients' | 'settings';

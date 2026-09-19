@@ -9,6 +9,7 @@ import { SettingsScreen } from './components/SettingsScreen';
 import { AppointmentFormPage } from './components/AppointmentFormPage';
 import { PrintDocumentView } from './components/PrintDocumentView';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
+import { SendMessageModal } from './components/SendMessageModal';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { getTodayDateString } from './utils/date';
 import { CheckCircle2 } from 'lucide-react';
@@ -26,6 +27,7 @@ export default function App() {
     phone: '',
     address: '',
     printFooterNote: 'CONFIDENTIAL MEDICAL RECORD • FOR OFFICIAL USE ONLY',
+    defaultCountryCode: '+1',
   });
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,6 +44,10 @@ export default function App() {
   const [isPrintOpen, setIsPrintOpen] = useState(false);
   const [printType, setPrintType] = useState<PrintType>('today');
   const [printPatient, setPrintPatient] = useState<Patient | null>(null);
+
+  // SMS / WhatsApp Notification Modal State
+  const [messageModalAppointment, setMessageModalAppointment] = useState<Appointment | null>(null);
+  const [messageInitialChannel, setMessageInitialChannel] = useState<'whatsapp' | 'sms' | undefined>(undefined);
 
   // Delete Confirmation State
   const [deleteModal, setDeleteModal] = useState<{
@@ -110,7 +116,7 @@ export default function App() {
     setIsFormOpen(true);
   };
 
-  const handleSaveAppointment = async (appointment: Appointment) => {
+  const handleSaveAppointment = async (appointment: Appointment, notifyAfterSave: boolean = false) => {
     try {
       await dbService.saveAppointment(appointment);
       await refreshData();
@@ -118,9 +124,41 @@ export default function App() {
       showToast(
         appointmentToEdit ? 'Appointment updated successfully.' : 'New appointment created in queue.'
       );
+      if (notifyAfterSave) {
+        setMessageModalAppointment(appointment);
+        setMessageInitialChannel('whatsapp');
+      }
     } catch (err) {
       console.error('Error saving appointment', err);
       showToast('Error saving appointment.');
+    }
+  };
+
+  const handleOpenNotificationModal = (appointment: Appointment, initialChannel?: 'whatsapp' | 'sms') => {
+    setMessageModalAppointment(appointment);
+    setMessageInitialChannel(initialChannel);
+  };
+
+  const handleUpdatePhone = async (appointmentId: string, patientName: string, newPhone: string) => {
+    try {
+      if (appointmentId) {
+        const appt = appointments.find((a) => a.id === appointmentId);
+        if (appt) {
+          await dbService.saveAppointment({ ...appt, phone: newPhone, updatedAt: Date.now() });
+        }
+      }
+      if (patientName) {
+        const pat = patients.find(
+          (p) => p.name.trim().toLowerCase() === patientName.trim().toLowerCase()
+        );
+        if (pat) {
+          await dbService.savePatient({ ...pat, phone: newPhone, updatedAt: Date.now() });
+        }
+      }
+      await refreshData();
+      showToast('Phone number updated.');
+    } catch (err) {
+      console.error('Error updating phone', err);
     }
   };
 
@@ -279,6 +317,7 @@ export default function App() {
                 onStatusChange={handleStatusChange}
                 onNewAppointment={handleOpenNewAppointment}
                 onOpenPrint={() => handleOpenPrint('today')}
+                onNotify={handleOpenNotificationModal}
               />
             )}
 
@@ -290,6 +329,7 @@ export default function App() {
                 onStatusChange={handleStatusChange}
                 onNewAppointment={handleOpenNewAppointment}
                 onOpenPrint={() => handleOpenPrint('upcoming')}
+                onNotify={handleOpenNotificationModal}
               />
             )}
 
@@ -301,6 +341,7 @@ export default function App() {
                 onSavePatient={handleSavePatient}
                 onDeletePatient={handleDeletePatientRequest}
                 onOpenPrint={(type, patient) => handleOpenPrint(type, patient)}
+                onNotify={handleOpenNotificationModal}
               />
             )}
 
@@ -396,6 +437,17 @@ export default function App() {
         confirmText={deleteModal.type === 'clearDb' ? 'Reset Everything' : 'Delete'}
         onConfirm={handleConfirmDelete}
         onCancel={() => setDeleteModal((prev) => ({ ...prev, isOpen: false }))}
+      />
+
+      {/* SMS & WhatsApp Messaging Modal */}
+      <SendMessageModal
+        isOpen={!!messageModalAppointment}
+        appointment={messageModalAppointment}
+        settings={settings}
+        initialChannel={messageInitialChannel}
+        onClose={() => setMessageModalAppointment(null)}
+        onUpdatePhone={handleUpdatePhone}
+        onToast={showToast}
       />
     </div>
   );

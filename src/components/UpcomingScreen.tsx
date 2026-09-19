@@ -20,6 +20,7 @@ interface UpcomingScreenProps {
   onStatusChange: (id: string, newStatus: AppointmentStatus) => void;
   onNewAppointment: (prefilledDate?: string) => void;
   onOpenPrint: (type: 'upcoming') => void;
+  onNotify?: (appointment: Appointment, initialChannel?: 'whatsapp' | 'sms') => void;
 }
 
 export const UpcomingScreen: React.FC<UpcomingScreenProps> = ({
@@ -29,6 +30,7 @@ export const UpcomingScreen: React.FC<UpcomingScreenProps> = ({
   onStatusChange,
   onNewAppointment,
   onOpenPrint,
+  onNotify,
 }) => {
   const todayStr = getTodayDateString();
   const [searchQuery, setSearchQuery] = useState('');
@@ -189,6 +191,7 @@ export const UpcomingScreen: React.FC<UpcomingScreenProps> = ({
                     onEdit={onEdit}
                     onDelete={onDelete}
                     onStatusChange={onStatusChange}
+                    onNotify={onNotify}
                     showDate={false}
                   />
                 ))}

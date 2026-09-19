@@ -16,8 +16,10 @@ import {
   Clock3,
   XCircle,
   X,
-  UserPlus
+  UserPlus,
+  MessageSquare
 } from 'lucide-react';
+import { WhatsAppIcon } from './icons/WhatsAppIcon';
 
 interface PatientsScreenProps {
   patients: Patient[];
@@ -26,6 +28,7 @@ interface PatientsScreenProps {
   onSavePatient: (patient: Patient) => void;
   onDeletePatient: (id: string, name: string) => void;
   onOpenPrint: (type: PrintType, patient?: Patient) => void;
+  onNotify?: (appointment: Appointment, initialChannel?: 'whatsapp' | 'sms') => void;
 }
 
 
@@ -36,6 +39,7 @@ export const PatientsScreen: React.FC<PatientsScreenProps> = ({
   onSavePatient,
   onDeletePatient,
   onOpenPrint,
+  onNotify,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPatientForHistory, setSelectedPatientForHistory] = useState<Patient | null>(null);
@@ -327,9 +331,33 @@ export const PatientsScreen: React.FC<PatientsScreenProps> = ({
                       </span>
                     </div>
 
-                    <div className="text-xs text-[#8E8E93] flex items-center gap-2">
-                      {apt.queueNumber && <span>Queue #{apt.queueNumber}</span>}
-                      {apt.visitType && <span>• {apt.visitType}</span>}
+                    <div className="text-xs text-[#8E8E93] flex items-center justify-between gap-2 flex-wrap">
+                      <div className="flex items-center gap-2">
+                        {apt.queueNumber && <span>Queue #{apt.queueNumber}</span>}
+                        {apt.visitType && <span>• {apt.visitType}</span>}
+                      </div>
+                      {onNotify && (
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={() => onNotify(apt, 'whatsapp')}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-[#25D366]/10 text-[#1EAA52] hover:bg-[#25D366]/20 transition cursor-pointer"
+                            title="Send WhatsApp message"
+                          >
+                            <WhatsAppIcon className="w-2.5 h-2.5" />
+                            <span>WhatsApp</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => onNotify(apt, 'sms')}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-[#007AFF]/10 text-[#007AFF] hover:bg-[#007AFF]/20 transition cursor-pointer"
+                            title="Send SMS message"
+                          >
+                            <MessageSquare className="w-2.5 h-2.5" />
+                            <span>SMS</span>
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {apt.notes && (

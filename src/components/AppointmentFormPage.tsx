@@ -14,7 +14,8 @@ import {
   FileText,
   Trash2,
   Sparkles,
-  ChevronDown
+  ChevronDown,
+  MessageSquare
 } from 'lucide-react';
 
 interface AppointmentFormPageProps {
@@ -25,7 +26,7 @@ interface AppointmentFormPageProps {
   initialDate?: string;
   existingAppointments: Appointment[];
   existingPatients: Patient[];
-  onSave: (appointment: Appointment) => void;
+  onSave: (appointment: Appointment, notifyAfterSave?: boolean) => void;
   onCancel: () => void;
   onDelete?: (id: string, patientName: string) => void;
 }
@@ -156,8 +157,8 @@ export const AppointmentFormPage: React.FC<AppointmentFormPageProps> = ({
     setQueueNumber(String(maxNum + 1).padStart(2, '0'));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (e?: React.FormEvent, notifyAfterSave: boolean = false) => {
+    if (e) e.preventDefault();
 
     const newErrors: { patientName?: string; date?: string } = {};
     if (!patientName.trim()) {
@@ -190,7 +191,7 @@ export const AppointmentFormPage: React.FC<AppointmentFormPageProps> = ({
       updatedAt: Date.now(),
     };
 
-    onSave(record);
+    onSave(record, notifyAfterSave);
   };
 
   if (!isOpen) return null;
@@ -213,14 +214,27 @@ export const AppointmentFormPage: React.FC<AppointmentFormPageProps> = ({
             {appointmentToEdit ? 'Edit Appointment' : 'New Appointment'}
           </h1>
 
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="flex items-center gap-1 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#007AFF] hover:bg-[#0066D6] active:scale-95 rounded-lg shadow-2xs transition cursor-pointer min-h-[32px]"
-          >
-            <Check className="w-3.5 h-3.5" />
-            <span>Save</span>
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={(e) => handleSubmit(e, true)}
+              className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-[#007AFF] bg-[#007AFF]/10 hover:bg-[#007AFF]/20 active:scale-95 rounded-lg transition cursor-pointer min-h-[32px]"
+              title="Save appointment and send SMS or WhatsApp message to patient"
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Save & Notify</span>
+              <span className="sm:hidden">Notify</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={(e) => handleSubmit(e, false)}
+              className="flex items-center gap-1 px-3.5 py-1.5 text-xs font-semibold text-white bg-[#007AFF] hover:bg-[#0066D6] active:scale-95 rounded-lg shadow-2xs transition cursor-pointer min-h-[32px]"
+            >
+              <Check className="w-3.5 h-3.5" />
+              <span>Save</span>
+            </button>
+          </div>
         </div>
       </header>
 

@@ -22,6 +22,7 @@ interface TodayScreenProps {
   onStatusChange: (id: string, newStatus: AppointmentStatus) => void;
   onNewAppointment: (prefilledDate?: string) => void;
   onOpenPrint: (type: 'today') => void;
+  onNotify?: (appointment: Appointment, initialChannel?: 'whatsapp' | 'sms') => void;
 }
 
 export const TodayScreen: React.FC<TodayScreenProps> = ({
@@ -31,6 +32,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
   onStatusChange,
   onNewAppointment,
   onOpenPrint,
+  onNotify,
 }) => {
   const todayStr = getTodayDateString();
   const [searchQuery, setSearchQuery] = useState('');
@@ -175,6 +177,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
               onEdit={onEdit}
               onDelete={onDelete}
               onStatusChange={onStatusChange}
+              onNotify={onNotify}
             />
           ))
         ) : todayAppointments.length === 0 ? (
