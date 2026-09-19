@@ -80,7 +80,7 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
         }
 
         await navigator.share({
-          title: `${safeSettings.clinicName || 'Medical Organizer'} - Report`,
+          title: `${safeSettings.clinicName || 'Appointment Buddy'} - Report`,
           text: textSummary,
         });
       } catch {

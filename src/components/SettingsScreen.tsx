@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { DEFAULT_TEMPLATES, renderMessageTemplate } from '../utils/messaging';
 import { WhatsAppIcon } from './icons/WhatsAppIcon';
+import appLogo from '../assets/app-logo.png';
 
 
 interface SettingsScreenProps {
@@ -481,6 +482,22 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </button>
           </div>
         )}
+
+        {/* About Appointment Buddy */}
+        <div className="bg-white rounded-xl p-3.5 border border-[#F2F2F7] shadow-2xs flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl ring-2 ring-[#007AFF]/20 p-0.5 bg-white shrink-0 overflow-hidden shadow-xs">
+              <img src={appLogo} alt="Appointment Buddy" className="w-full h-full object-cover rounded-[10px]" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-[#1C1C1E] font-brand">Appointment Buddy</h4>
+              <p className="text-[10px] text-[#8E8E93]">Version 1.0 • Offline-Ready Clinical Practice Organizer</p>
+            </div>
+          </div>
+          <span className="text-[10px] font-semibold text-[#007AFF] bg-[#007AFF]/10 px-2 py-0.5 rounded-full">
+            Active
+          </span>
+        </div>
       </div>
     </div>
   );

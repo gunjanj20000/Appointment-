@@ -265,7 +265,7 @@ export const dbService = {
     const settings = await this.getSettings();
 
     const payload = {
-      app: 'MedicalAppointmentOrganizer',
+      app: 'AppointmentBuddy',
       version: 1,
       exportedAt: new Date().toISOString(),
       appointments,

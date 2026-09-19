@@ -243,7 +243,7 @@ export default function App() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `medical_appointments_backup_${getTodayDateString()}.json`;
+      a.download = `appointment_buddy_backup_${getTodayDateString()}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

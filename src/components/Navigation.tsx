@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ScreenTab } from '../types';
 import { usePWAInstall } from '../hooks/usePWAInstall';
+import appLogo from '../assets/app-logo.png';
 import {
   CalendarDays,
   CalendarRange,
@@ -43,19 +44,32 @@ export const Navigation: React.FC<NavigationProps> = ({
       {/* Top Header Bar (Desktop & Mobile) */}
       <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#F2F2F7] pt-safe px-3 sm:px-4 py-1.5 sm:py-2 transition no-print shrink-0">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
-          {/* Brand Logo & Title */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#007AFF] flex items-center justify-center text-white shadow-2xs shrink-0">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-              </svg>
+          {/* Brand Logo & Title with beautiful typography */}
+          <button
+            type="button"
+            onClick={() => onTabChange('today')}
+            className="flex items-center gap-2 sm:gap-2.5 text-left group cursor-pointer focus:outline-hidden"
+            title="Appointment Buddy - Go to Today"
+          >
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-[#0051C7] via-[#007AFF] to-[#00A896] p-0.5 shadow-xs shrink-0 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <div className="w-full h-full bg-[#007AFF] rounded-[10px] flex items-center justify-center text-white">
+                <svg className="w-4 h-4 sm:w-4.5 sm:h-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                </svg>
+              </div>
             </div>
-            <div>
-              <h1 className="text-sm sm:text-base font-bold text-[#1C1C1E] tracking-tight leading-none">
-                Medical Organizer
+            <div className="flex flex-col">
+              <h1 className="font-brand text-base sm:text-lg font-extrabold text-[#1C1C1E] tracking-tight leading-none flex items-center gap-1">
+                <span>Appointment</span>
+                <span className="bg-gradient-to-r from-[#007AFF] to-[#00A896] bg-clip-text text-transparent font-black">
+                  Buddy
+                </span>
               </h1>
+              <span className="text-[10px] font-semibold text-[#8E8E93] tracking-wide uppercase hidden sm:block mt-0.5">
+                Practice & Care
+              </span>
             </div>
-          </div>
+          </button>
 
           {/* Desktop Navigation Tabs */}
           <nav className="hidden md:flex items-center gap-1 bg-[#F2F2F7] p-1 rounded-xl">
@@ -108,6 +122,23 @@ export const Navigation: React.FC<NavigationProps> = ({
               <Plus className="w-3.5 h-3.5" />
               <span>New</span>
             </button>
+
+            {/* App / Clinic Logo Icon on Right Window of App Bar */}
+            <div className="flex items-center pl-1.5 sm:pl-2 border-l border-[#E5E5EA]">
+              <button
+                type="button"
+                onClick={() => onTabChange('settings')}
+                className="relative p-0.5 rounded-full ring-2 ring-[#007AFF]/30 hover:ring-[#007AFF] shadow-sm transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shrink-0 bg-white"
+                title="Appointment Buddy Settings & Clinic Profile"
+                aria-label="Appointment Buddy Settings and Clinic Profile"
+              >
+                <img
+                  src={appLogo}
+                  alt="Appointment Buddy Logo"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover block"
+                />
+              </button>
+            </div>
           </div>
         </div>
       </header>

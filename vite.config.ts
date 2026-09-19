@@ -12,13 +12,13 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['icon.svg', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png'],
+        includeAssets: ['logo.png', 'icon.svg', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png'],
         manifest: {
           id: './',
-          name: 'Medical Appointment Organizer',
-          short_name: 'Appointments',
-          description: 'Mobile-first offline PWA for organizing medical appointments, queue management, and patient records.',
-          theme_color: '#0d9488',
+          name: 'Appointment Buddy',
+          short_name: 'Appointment Buddy',
+          description: 'Mobile-first offline appointment organizer, queue management, and patient records.',
+          theme_color: '#007AFF',
           background_color: '#f8fafc',
           display: 'standalone',
           start_url: './',
