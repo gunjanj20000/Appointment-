@@ -76,21 +76,21 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
   return (
     <div className="h-full flex flex-col min-h-0 overflow-hidden space-y-2.5">
       {/* Compact Top Control Bar */}
-      <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-[#F2F2F7] shadow-2xs shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+      <div className="bg-white dark:bg-[#181C26] rounded-xl p-2.5 sm:p-3 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         {/* Left: Date & Status Filters with counts */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-bold text-[#1C1C1E] whitespace-nowrap">
+          <span className="text-sm font-bold text-[#1C1C1E] dark:text-white whitespace-nowrap">
             {formatFriendlyDate(todayStr)}
           </span>
 
-          <div className="flex items-center gap-1 bg-[#F2F2F7] p-0.5 rounded-lg overflow-x-auto">
+          <div className="flex items-center gap-1 bg-[#F2F2F7] dark:bg-[#212632] p-0.5 rounded-lg overflow-x-auto">
             <button
               type="button"
               onClick={() => setStatusFilter('All')}
               className={`px-2.5 py-1 rounded-md text-xs font-semibold transition cursor-pointer min-h-[28px] ${
                 statusFilter === 'All'
-                  ? 'bg-white text-[#007AFF] shadow-2xs font-bold'
-                  : 'text-[#8E8E93] hover:text-[#1C1C1E]'
+                  ? 'bg-white dark:bg-slate-700 text-[#007AFF] dark:text-[#3898FF] shadow-2xs font-bold'
+                  : 'text-[#8E8E93] dark:text-slate-400 hover:text-[#1C1C1E] dark:hover:text-white'
               }`}
             >
               All ({stats.total})
@@ -100,8 +100,8 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
               onClick={() => setStatusFilter('Waiting')}
               className={`px-2.5 py-1 rounded-md text-xs font-semibold transition cursor-pointer min-h-[28px] ${
                 statusFilter === 'Waiting'
-                  ? 'bg-white text-[#FF9500] shadow-2xs font-bold'
-                  : 'text-[#8E8E93] hover:text-[#FF9500]'
+                  ? 'bg-white dark:bg-slate-700 text-[#FF9500] dark:text-amber-400 shadow-2xs font-bold'
+                  : 'text-[#8E8E93] dark:text-slate-400 hover:text-[#FF9500]'
               }`}
             >
               Waiting ({stats.waiting})
@@ -111,8 +111,8 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
               onClick={() => setStatusFilter('Completed')}
               className={`px-2.5 py-1 rounded-md text-xs font-semibold transition cursor-pointer min-h-[28px] ${
                 statusFilter === 'Completed'
-                  ? 'bg-white text-[#34C759] shadow-2xs font-bold'
-                  : 'text-[#8E8E93] hover:text-[#34C759]'
+                  ? 'bg-white dark:bg-slate-700 text-[#34C759] dark:text-emerald-400 shadow-2xs font-bold'
+                  : 'text-[#8E8E93] dark:text-slate-400 hover:text-[#34C759]'
               }`}
             >
               Done ({stats.completed})
@@ -123,8 +123,8 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
                 onClick={() => setStatusFilter('Cancelled')}
                 className={`px-2.5 py-1 rounded-md text-xs font-semibold transition cursor-pointer min-h-[28px] ${
                   statusFilter === 'Cancelled'
-                    ? 'bg-white text-[#FF3B30] shadow-2xs font-bold'
-                    : 'text-[#8E8E93] hover:text-[#FF3B30]'
+                    ? 'bg-white dark:bg-slate-700 text-[#FF3B30] dark:text-rose-400 shadow-2xs font-bold'
+                    : 'text-[#8E8E93] dark:text-slate-400 hover:text-[#FF3B30]'
                 }`}
               >
                 Cancelled ({stats.cancelled})
@@ -141,14 +141,14 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-7 pr-6 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:bg-white focus:border-[#007AFF] focus:outline-hidden transition"
+              className="w-full pl-7 pr-6 py-1.5 text-xs rounded-lg border border-[#E5E5EA] dark:border-slate-700 bg-[#F2F2F7] dark:bg-[#212632] text-[#1C1C1E] dark:text-white placeholder-[#8E8E93] dark:placeholder-slate-500 focus:bg-white dark:focus:bg-[#1B202B] focus:border-[#007AFF] focus:outline-hidden transition"
             />
-            <Search className="w-3.5 h-3.5 text-[#8E8E93] absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-[#8E8E93] dark:text-slate-400 absolute left-2 top-1/2 -translate-y-1/2 pointer-events-none" />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[#8E8E93] hover:text-[#1C1C1E]"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[#8E8E93] dark:text-slate-400 hover:text-[#1C1C1E] dark:hover:text-white"
               >
                 ✕
               </button>
@@ -159,10 +159,10 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
             type="button"
             onClick={() => onOpenPrint('today')}
             disabled={stats.total === 0}
-            className="p-1.5 text-[#1C1C1E] bg-[#F2F2F7] hover:bg-[#E5E5EA] disabled:opacity-30 disabled:pointer-events-none rounded-lg transition cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center shrink-0"
+            className="p-1.5 text-[#1C1C1E] dark:text-white bg-[#F2F2F7] dark:bg-slate-800 hover:bg-[#E5E5EA] dark:hover:bg-slate-700 disabled:opacity-30 disabled:pointer-events-none rounded-lg transition cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center shrink-0"
             title="Print roster"
           >
-            <Printer className="w-3.5 h-3.5 text-[#8E8E93]" />
+            <Printer className="w-3.5 h-3.5 text-[#8E8E93] dark:text-slate-400" />
           </button>
         </div>
       </div>
@@ -182,12 +182,12 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
           ))
         ) : todayAppointments.length === 0 ? (
           /* Empty State */
-          <div className="h-full min-h-[220px] bg-white rounded-xl p-6 text-center border border-dashed border-[#E5E5EA] flex flex-col items-center justify-center">
-            <div className="w-10 h-10 rounded-xl bg-[#007AFF]/10 text-[#007AFF] flex items-center justify-center mb-2">
+          <div className="h-full min-h-[220px] bg-white dark:bg-[#181C26] rounded-xl p-6 text-center border border-dashed border-[#E5E5EA] dark:border-slate-800 flex flex-col items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-[#007AFF]/10 dark:bg-[#007AFF]/20 text-[#007AFF] dark:text-[#3898FF] flex items-center justify-center mb-2">
               <Calendar className="w-5 h-5" />
             </div>
-            <h3 className="text-sm font-bold text-[#1C1C1E]">No Appointments Today</h3>
-            <p className="text-xs text-[#8E8E93] mt-0.5 max-w-xs">
+            <h3 className="text-sm font-bold text-[#1C1C1E] dark:text-white">No Appointments Today</h3>
+            <p className="text-xs text-[#8E8E93] dark:text-slate-400 mt-0.5 max-w-xs">
               Today's queue is empty. Tap below to register a patient in queue.
             </p>
             <button
@@ -201,8 +201,8 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
           </div>
         ) : (
           /* No filter matches */
-          <div className="bg-white rounded-xl p-6 text-center border border-[#F2F2F7]">
-            <p className="text-xs font-medium text-[#8E8E93]">
+          <div className="bg-white dark:bg-[#181C26] rounded-xl p-6 text-center border border-[#F2F2F7] dark:border-slate-800">
+            <p className="text-xs font-medium text-[#8E8E93] dark:text-slate-400">
               No appointments matching "{searchQuery || statusFilter}".
             </p>
             <button
@@ -211,7 +211,7 @@ export const TodayScreen: React.FC<TodayScreenProps> = ({
                 setSearchQuery('');
                 setStatusFilter('All');
               }}
-              className="mt-2 text-xs font-semibold text-[#007AFF] hover:underline cursor-pointer"
+              className="mt-2 text-xs font-semibold text-[#007AFF] dark:text-[#3898FF] hover:underline cursor-pointer"
             >
               Reset Filters
             </button>

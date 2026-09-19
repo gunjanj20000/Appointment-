@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ScreenTab } from '../types';
 import { usePWAInstall } from '../hooks/usePWAInstall';
+import { ThemeSlider } from './ThemeSlider';
 import appLogo from '../assets/app-logo.png';
 import {
   CalendarDays,
@@ -50,7 +51,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   return (
     <>
       {/* Top Header Bar (Desktop & Mobile) */}
-      <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-[#F2F2F7] pt-safe px-3 sm:px-4 py-1.5 sm:py-2 transition no-print shrink-0">
+      <header className="sticky top-0 z-30 bg-white/95 dark:bg-[#141822]/95 backdrop-blur-md border-b border-[#F2F2F7] dark:border-slate-800 pt-safe px-3 sm:px-4 py-1.5 sm:py-2 transition-colors no-print shrink-0">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
           {/* Brand Logo & Title with beautiful typography */}
           <button
@@ -67,20 +68,20 @@ export const Navigation: React.FC<NavigationProps> = ({
               </div>
             </div>
             <div className="flex flex-col">
-              <h1 className="font-brand text-base sm:text-lg font-extrabold text-[#1C1C1E] tracking-tight leading-none flex items-center gap-1">
+              <h1 className="font-brand text-base sm:text-lg font-extrabold text-[#1C1C1E] dark:text-white tracking-tight leading-none flex items-center gap-1">
                 <span>Appointment</span>
                 <span className="bg-gradient-to-r from-[#007AFF] to-[#00A896] bg-clip-text text-transparent font-black">
                   Buddy
                 </span>
               </h1>
-              <span className="text-[10px] font-semibold text-[#8E8E93] tracking-wide uppercase hidden sm:block mt-0.5">
+              <span className="text-[10px] font-semibold text-[#8E8E93] dark:text-slate-400 tracking-wide uppercase hidden sm:block mt-0.5">
                 Practice & Care
               </span>
             </div>
           </button>
 
           {/* Desktop Navigation Tabs */}
-          <nav className="hidden md:flex items-center gap-1 bg-[#F2F2F7] p-1 rounded-xl">
+          <nav className="hidden md:flex items-center gap-1 bg-[#F2F2F7] dark:bg-[#1C212E] p-1 rounded-xl">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = currentTab === tab.id;
@@ -91,8 +92,8 @@ export const Navigation: React.FC<NavigationProps> = ({
                   onClick={() => onTabChange(tab.id)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer min-h-[34px] ${
                     isActive
-                      ? 'bg-white text-[#007AFF] shadow-2xs font-bold'
-                      : 'text-[#8E8E93] hover:text-[#1C1C1E] hover:bg-white/50'
+                      ? 'bg-white dark:bg-slate-700 text-[#007AFF] dark:text-[#3898FF] shadow-2xs font-bold'
+                      : 'text-[#8E8E93] dark:text-slate-400 hover:text-[#1C1C1E] dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-800/60'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -108,15 +109,18 @@ export const Navigation: React.FC<NavigationProps> = ({
           </nav>
 
           {/* Right Header Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            {/* Light / Dark Theme Slider Button */}
+            <ThemeSlider variant="compact" />
+
             {/* PWA Install Button */}
             {!isInstalled && isInstallable && (
               <button
                 type="button"
                 onClick={install}
-                className="hidden sm:flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-[#007AFF]/10 text-[#007AFF] hover:bg-[#007AFF]/15 rounded-lg transition cursor-pointer min-h-[34px]"
+                className="hidden sm:flex items-center gap-1 px-2.5 py-1 text-xs font-medium bg-[#007AFF]/10 dark:bg-[#007AFF]/20 text-[#007AFF] dark:text-[#3898FF] hover:bg-[#007AFF]/15 dark:hover:bg-[#007AFF]/25 rounded-lg transition cursor-pointer min-h-[34px]"
               >
-                <Download className="w-3.5 h-3.5 text-[#007AFF]" />
+                <Download className="w-3.5 h-3.5 text-[#007AFF] dark:text-[#3898FF]" />
                 <span>Install</span>
               </button>
             )}
@@ -125,19 +129,19 @@ export const Navigation: React.FC<NavigationProps> = ({
             <button
               type="button"
               onClick={onNewAppointment}
-              className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-white bg-[#007AFF] hover:bg-[#0066D6] active:scale-95 rounded-lg shadow-2xs transition cursor-pointer min-h-[34px]"
+              className="flex items-center gap-1 px-2.5 sm:px-3 py-1.5 text-xs font-semibold text-white bg-[#007AFF] hover:bg-[#0066D6] active:scale-95 rounded-lg shadow-2xs transition cursor-pointer min-h-[34px]"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>New</span>
             </button>
 
             {/* App / Clinic Logo Icon on Right Window of App Bar */}
-            <div className="flex items-center pl-1.5 sm:pl-2 border-l border-[#E5E5EA]">
+            <div className="flex items-center pl-1 sm:pl-2 border-l border-[#E5E5EA] dark:border-slate-800">
               <button
                 type="button"
                 onClick={handleLogoClick}
                 onAnimationEnd={() => setIsLogoAnimating(false)}
-                className={`relative p-0.5 rounded-full ring-2 ring-[#007AFF]/30 hover:ring-[#007AFF] shadow-xs transition-transform duration-200 hover:scale-105 active:scale-115 cursor-pointer shrink-0 bg-white select-none ${
+                className={`relative p-0.5 rounded-full ring-2 ring-[#007AFF]/30 hover:ring-[#007AFF] shadow-xs transition-transform duration-200 hover:scale-105 active:scale-115 cursor-pointer shrink-0 bg-white dark:bg-slate-800 select-none ${
                   isLogoAnimating ? 'animate-kj-bounce' : ''
                 }`}
                 title="Appointment Buddy"
@@ -155,7 +159,7 @@ export const Navigation: React.FC<NavigationProps> = ({
       </header>
 
       {/* Bottom Tab Bar for Mobile & iPad */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#F9F9F9]/95 backdrop-blur-md border-t border-[#D1D1D6] px-3 pt-1.5 pb-safe bottom-nav-bar no-print">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#F9F9F9]/95 dark:bg-[#141822]/95 backdrop-blur-md border-t border-[#D1D1D6] dark:border-slate-800 px-3 pt-1.5 pb-safe bottom-nav-bar no-print">
         <div className="grid grid-cols-4 gap-1 max-w-md mx-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -166,7 +170,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                 type="button"
                 onClick={() => onTabChange(tab.id)}
                 className={`flex flex-col items-center justify-center py-2 px-1 rounded-xl transition cursor-pointer min-h-[50px] relative ${
-                  isActive ? 'text-[#007AFF] font-bold' : 'text-[#8E8E93] hover:text-[#1C1C1E]'
+                  isActive ? 'text-[#007AFF] dark:text-[#3898FF] font-bold' : 'text-[#8E8E93] dark:text-slate-400 hover:text-[#1C1C1E] dark:hover:text-white'
                 }`}
               >
                 <div className="relative">
@@ -187,34 +191,34 @@ export const Navigation: React.FC<NavigationProps> = ({
       {/* iOS Installation Instructions Modal */}
       {showIOSModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs no-print">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl border border-[#F2F2F7]">
-            <div className="flex items-center justify-between pb-3 border-b border-[#F2F2F7]">
-              <h3 className="text-base font-bold text-[#1C1C1E]">Install on iPhone / iPad</h3>
+          <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-[#1A1F2C] p-6 shadow-2xl border border-[#F2F2F7] dark:border-slate-800">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F2F2F7] dark:border-slate-800">
+              <h3 className="text-base font-bold text-[#1C1C1E] dark:text-white">Install on iPhone / iPad</h3>
               <button
                 onClick={() => setShowIOSModal(false)}
-                className="p-1 text-[#8E8E93] hover:text-[#1C1C1E] rounded-lg"
+                className="p-1 text-[#8E8E93] hover:text-[#1C1C1E] dark:hover:text-white rounded-lg"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="mt-4 space-y-3 text-sm text-[#8E8E93]">
+            <div className="mt-4 space-y-3 text-sm text-[#8E8E93] dark:text-slate-300">
               <div className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-[#007AFF]/10 text-[#007AFF] font-bold flex items-center justify-center shrink-0 text-xs">
                   1
                 </span>
-                <p className="text-[#1C1C1E]">Tap the <strong>Share</strong> button (box with an arrow pointing up) in Safari's bottom toolbar.</p>
+                <p className="text-[#1C1C1E] dark:text-slate-200">Tap the <strong>Share</strong> button (box with an arrow pointing up) in Safari's bottom toolbar.</p>
               </div>
               <div className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-[#007AFF]/10 text-[#007AFF] font-bold flex items-center justify-center shrink-0 text-xs">
                   2
                 </span>
-                <p className="text-[#1C1C1E]">Scroll down the share sheet and tap <strong>"Add to Home Screen"</strong>.</p>
+                <p className="text-[#1C1C1E] dark:text-slate-200">Scroll down the share sheet and tap <strong>"Add to Home Screen"</strong>.</p>
               </div>
               <div className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-[#007AFF]/10 text-[#007AFF] font-bold flex items-center justify-center shrink-0 text-xs">
                   3
                 </span>
-                <p className="text-[#1C1C1E]">Tap <strong>Add</strong> in the top-right corner. The app will launch full-screen with offline support!</p>
+                <p className="text-[#1C1C1E] dark:text-slate-200">Tap <strong>Add</strong> in the top-right corner. The app will launch full-screen with offline support!</p>
               </div>
             </div>
             <button

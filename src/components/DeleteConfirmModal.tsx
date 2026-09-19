@@ -23,15 +23,15 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs no-print">
-      <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl border border-[#F2F2F7] animate-in fade-in zoom-in-95 duration-150">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs no-print">
+      <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-[#181C26] p-6 shadow-2xl border border-[#F2F2F7] dark:border-slate-800 animate-in fade-in zoom-in-95 duration-150">
         <div className="flex items-start gap-3.5">
-          <div className={`p-2.5 rounded-xl ${isDanger ? 'bg-[#FFEBEA] text-[#FF3B30]' : 'bg-[#FFF9EB] text-[#FF9500]'}`}>
+          <div className={`p-2.5 rounded-xl ${isDanger ? 'bg-[#FFEBEA] dark:bg-rose-950/40 text-[#FF3B30] dark:text-rose-400' : 'bg-[#FFF9EB] dark:bg-amber-950/40 text-[#FF9500] dark:text-amber-400'}`}>
             <AlertTriangle className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-[#1C1C1E]">{title}</h3>
-            <p className="mt-1 text-sm text-[#8E8E93] leading-relaxed">{message}</p>
+            <h3 className="text-lg font-bold text-[#1C1C1E] dark:text-white">{title}</h3>
+            <p className="mt-1 text-sm text-[#8E8E93] dark:text-slate-400 leading-relaxed">{message}</p>
           </div>
         </div>
 
@@ -39,7 +39,7 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2.5 text-sm font-semibold text-[#1C1C1E] bg-[#F2F2F7] hover:bg-[#E5E5EA] rounded-xl transition cursor-pointer min-h-[44px]"
+            className="px-4 py-2.5 text-sm font-semibold text-[#1C1C1E] dark:text-slate-200 bg-[#F2F2F7] dark:bg-slate-800 hover:bg-[#E5E5EA] dark:hover:bg-slate-700 rounded-xl transition cursor-pointer min-h-[44px]"
           >
             Cancel
           </button>

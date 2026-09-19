@@ -283,10 +283,10 @@ export default function App() {
   ).length;
 
   return (
-    <div className="h-[100dvh] max-h-[100dvh] bg-[#F0F2F5] text-[#1C1C1E] flex flex-col overflow-hidden selection:bg-[#007AFF] selection:text-white">
+    <div className="h-[100dvh] max-h-[100dvh] bg-[#F0F2F5] dark:bg-[#0D1117] text-[#1C1C1E] dark:text-[#F3F4F6] flex flex-col overflow-hidden selection:bg-[#007AFF] selection:text-white transition-colors duration-150">
       {/* Toast Banner */}
       {toastMessage && (
-        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#1C1C1E] text-white px-3 py-1.5 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2 animate-in fade-in slide-in-from-top-3 duration-200 border border-[#F2F2F7]/10 no-print">
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-[#1C1C1E] dark:bg-slate-800 text-white px-3 py-1.5 rounded-xl shadow-xl text-xs font-semibold flex items-center gap-2 animate-in fade-in slide-in-from-top-3 duration-200 border border-[#F2F2F7]/10 dark:border-slate-700/60 no-print">
           <CheckCircle2 className="w-3.5 h-3.5 text-[#34C759] shrink-0" />
           <span>{toastMessage}</span>
         </div>
@@ -305,7 +305,7 @@ export default function App() {
         {isLoading ? (
           <div className="flex flex-col items-center justify-center min-h-[50vh]">
             <div className="w-10 h-10 border-3 border-[#007AFF] border-t-transparent rounded-full animate-spin" />
-            <p className="mt-3 text-xs font-bold text-[#8E8E93]">Loading IndexedDB Database...</p>
+            <p className="mt-3 text-xs font-bold text-[#8E8E93] dark:text-slate-400">Loading IndexedDB Database...</p>
           </div>
         ) : (
           <>

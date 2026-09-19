@@ -193,18 +193,18 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-[#F2F2F7] flex flex-col max-h-[90dvh] overflow-hidden">
+      <div className="w-full max-w-lg bg-white dark:bg-[#181C26] rounded-2xl shadow-2xl border border-[#F2F2F7] dark:border-slate-800 flex flex-col max-h-[90dvh] overflow-hidden">
         {/* Modal Header */}
-        <div className="px-4 py-3 border-b border-[#F2F2F7] flex items-center justify-between shrink-0 bg-[#FAFAFA]">
+        <div className="px-4 py-3 border-b border-[#F2F2F7] dark:border-slate-800 flex items-center justify-between shrink-0 bg-[#FAFAFA] dark:bg-[#141822]">
           <div className="flex items-center gap-2 min-w-0">
             <div className="w-8 h-8 rounded-xl bg-[#25D366]/15 text-[#25D366] flex items-center justify-center shrink-0">
-              <MessageSquare className="w-4 h-4 text-[#007AFF]" />
+              <MessageSquare className="w-4 h-4 text-[#007AFF] dark:text-[#38BDF8]" />
             </div>
             <div className="min-w-0">
-              <h2 className="text-sm font-bold text-[#1C1C1E] truncate">
+              <h2 className="text-sm font-bold text-[#1C1C1E] dark:text-white truncate">
                 Notify Patient: {appointment.patientName}
               </h2>
-              <p className="text-[11px] text-[#8E8E93] truncate">
+              <p className="text-[11px] text-[#8E8E93] dark:text-slate-400 truncate">
                 Send appointment updates directly via SMS or WhatsApp
               </p>
             </div>
@@ -213,7 +213,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 text-[#8E8E93] hover:text-[#1C1C1E] hover:bg-[#F2F2F7] rounded-lg transition cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center"
+            className="p-1.5 text-[#8E8E93] hover:text-[#1C1C1E] dark:hover:text-white hover:bg-[#F2F2F7] dark:hover:bg-slate-800 rounded-lg transition cursor-pointer min-h-[32px] min-w-[32px] flex items-center justify-center"
             title="Close"
           >
             <X className="w-4 h-4" />
@@ -221,18 +221,18 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
         </div>
 
         {/* Modal Body */}
-        <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3.5 text-xs text-[#1C1C1E]">
+        <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3.5 text-xs text-[#1C1C1E] dark:text-slate-200">
           {/* Appointment Quick Info Pill */}
-          <div className="bg-[#F2F2F7]/70 rounded-xl p-2.5 flex items-center justify-between gap-2 flex-wrap text-[11px]">
+          <div className="bg-[#F2F2F7]/70 dark:bg-slate-800/60 rounded-xl p-2.5 flex items-center justify-between gap-2 flex-wrap text-[11px]">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-[#1C1C1E]">{appointment.patientName}</span>
+              <span className="font-semibold text-[#1C1C1E] dark:text-white">{appointment.patientName}</span>
               {appointment.queueNumber && (
-                <span className="px-1.5 py-0.5 rounded bg-white text-[#007AFF] font-bold shadow-2xs">
+                <span className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-700 text-[#007AFF] dark:text-[#38BDF8] font-bold shadow-2xs">
                   Q-{appointment.queueNumber}
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-3 text-[#8E8E93]">
+            <div className="flex items-center gap-3 text-[#8E8E93] dark:text-slate-400">
               <span className="inline-flex items-center gap-1">
                 <Calendar className="w-3 h-3" />
                 {appointment.date}
@@ -249,11 +249,11 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
           {/* Recipient Phone Input */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label htmlFor="modal-patient-phone" className="block text-xs font-semibold text-[#1C1C1E]">
+              <label htmlFor="modal-patient-phone" className="block text-xs font-semibold text-[#1C1C1E] dark:text-slate-200">
                 Patient Phone Number <span className="text-[#FF3B30]">*</span>
               </label>
               {whatsAppPhonePreview && (
-                <span className="text-[10px] text-[#8E8E93] font-mono">
+                <span className="text-[10px] text-[#8E8E93] dark:text-slate-400 font-mono">
                   Code: {settings.defaultCountryCode || '+91'} • Recipient: +{whatsAppPhonePreview}
                 </span>
               )}
@@ -270,11 +270,11 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
                 }}
                 className={`w-full pl-8 pr-3 py-2 text-xs rounded-xl border transition outline-hidden ${
                   !recipientPhone.trim()
-                    ? 'border-[#FF9500] bg-[#FFF9EB] focus:border-[#FF9500]'
-                    : 'border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white'
+                    ? 'border-[#FF9500] bg-[#FFF9EB] dark:bg-amber-950/30 dark:border-amber-700 text-[#1C1C1E] dark:text-amber-100 focus:border-[#FF9500]'
+                    : 'border-[#E5E5EA] dark:border-slate-700 bg-[#F2F2F7] dark:bg-[#212632] text-[#1C1C1E] dark:text-white focus:border-[#007AFF] dark:focus:border-[#38BDF8] focus:bg-white dark:focus:bg-[#212632]'
                 }`}
               />
-              <Phone className="w-3.5 h-3.5 text-[#8E8E93] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Phone className="w-3.5 h-3.5 text-[#8E8E93] dark:text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
             {/* Save phone checkbox if phone differs from appointment */}
@@ -284,9 +284,9 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
                 type="checkbox"
                 checked={savePhoneToRecord}
                 onChange={(e) => setSavePhoneToRecord(e.target.checked)}
-                className="w-3.5 h-3.5 rounded border-[#C7C7CC] text-[#007AFF] focus:ring-0 cursor-pointer"
+                className="w-3.5 h-3.5 rounded border-[#C7C7CC] dark:border-slate-600 text-[#007AFF] dark:text-[#38BDF8] focus:ring-0 cursor-pointer"
               />
-              <label htmlFor="save-phone-cb" className="text-[11px] text-[#8E8E93] cursor-pointer select-none">
+              <label htmlFor="save-phone-cb" className="text-[11px] text-[#8E8E93] dark:text-slate-400 cursor-pointer select-none">
                 Save / update phone number on patient's appointment profile
               </label>
             </div>
@@ -294,7 +294,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
 
           {/* Template Selection Tabs */}
           <div>
-            <label className="block text-xs font-semibold text-[#1C1C1E] mb-1.5">
+            <label className="block text-xs font-semibold text-[#1C1C1E] dark:text-slate-200 mb-1.5">
               Select Message Template
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
@@ -305,8 +305,8 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
                   onClick={() => handleTemplateChange(t)}
                   className={`px-2.5 py-1.5 text-xs font-semibold rounded-xl border transition cursor-pointer text-center ${
                     selectedTemplate === t
-                      ? 'border-[#007AFF] bg-[#007AFF]/10 text-[#007AFF]'
-                      : 'border-[#F2F2F7] bg-[#F2F2F7] text-[#8E8E93] hover:text-[#1C1C1E]'
+                      ? 'border-[#007AFF] bg-[#007AFF]/10 dark:bg-[#007AFF]/20 text-[#007AFF] dark:text-[#38BDF8]'
+                      : 'border-[#F2F2F7] dark:border-slate-800 bg-[#F2F2F7] dark:bg-slate-800/80 text-[#8E8E93] dark:text-slate-400 hover:text-[#1C1C1E] dark:hover:text-white'
                   }`}
                 >
                   {TEMPLATE_LABELS[t].label}
@@ -318,12 +318,12 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
           {/* Message Text Editor */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label htmlFor="modal-message-text" className="block text-xs font-semibold text-[#1C1C1E]">
+              <label htmlFor="modal-message-text" className="block text-xs font-semibold text-[#1C1C1E] dark:text-slate-200">
                 Message Content (Editable)
               </label>
               <span
                 className={`text-[10px] font-mono ${
-                  smsStats.smsCount > 1 ? 'text-[#FF9500]' : 'text-[#8E8E93]'
+                  smsStats.smsCount > 1 ? 'text-[#FF9500]' : 'text-[#8E8E93] dark:text-slate-400'
                 }`}
                 title="Character count and estimated SMS parts"
               >
@@ -338,14 +338,14 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
                 setMessageText(e.target.value);
                 setSelectedTemplate('custom');
               }}
-              className="w-full p-3 text-xs leading-relaxed rounded-xl border border-[#E5E5EA] bg-white focus:border-[#007AFF] outline-hidden resize-y font-sans text-[#1C1C1E]"
+              className="w-full p-3 text-xs leading-relaxed rounded-xl border border-[#E5E5EA] dark:border-slate-700 bg-white dark:bg-[#141822] text-[#1C1C1E] dark:text-slate-100 focus:border-[#007AFF] dark:focus:border-[#38BDF8] outline-hidden resize-y font-sans"
               placeholder="Type your message here..."
             />
           </div>
 
           {/* Error display if any */}
           {errorMessage && (
-            <div className="p-2.5 bg-[#FFEBEA] text-[#FF3B30] rounded-xl flex items-center gap-2 text-xs">
+            <div className="p-2.5 bg-[#FFEBEA] dark:bg-rose-950/40 text-[#FF3B30] dark:text-rose-300 rounded-xl flex items-center gap-2 text-xs border border-transparent dark:border-rose-800/40">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{errorMessage}</span>
             </div>
@@ -353,12 +353,12 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
         </div>
 
         {/* Modal Footer: Action Buttons */}
-        <div className="p-3.5 border-t border-[#F2F2F7] bg-[#FAFAFA] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 shrink-0">
+        <div className="p-3.5 border-t border-[#F2F2F7] dark:border-slate-800 bg-[#FAFAFA] dark:bg-[#141822] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 shrink-0">
           {/* Copy Message button */}
           <button
             type="button"
             onClick={handleCopyMessage}
-            className="flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#1C1C1E] bg-white border border-[#E5E5EA] hover:bg-[#F2F2F7] rounded-xl transition cursor-pointer min-h-[38px]"
+            className="flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold text-[#1C1C1E] dark:text-slate-200 bg-white dark:bg-slate-800 border border-[#E5E5EA] dark:border-slate-700 hover:bg-[#F2F2F7] dark:hover:bg-slate-700 rounded-xl transition cursor-pointer min-h-[38px]"
           >
             {copied ? (
               <>
@@ -367,7 +367,7 @@ export const SendMessageModal: React.FC<SendMessageModalProps> = ({
               </>
             ) : (
               <>
-                <Copy className="w-3.5 h-3.5 text-[#8E8E93]" />
+                <Copy className="w-3.5 h-3.5 text-[#8E8E93] dark:text-slate-400" />
                 <span>Copy Text</span>
               </>
             )}

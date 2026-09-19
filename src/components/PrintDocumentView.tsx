@@ -109,10 +109,10 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex flex-col justify-start items-center p-2 sm:p-6 overflow-y-auto print-modal-container">
       {/* Top action header (hidden during printing via .no-print) */}
-      <div className="no-print w-full max-w-4xl mb-4 bg-white rounded-2xl px-5 py-3.5 shadow-xl border border-[#F2F2F7] flex items-center justify-between gap-3 shrink-0">
+      <div className="no-print w-full max-w-4xl mb-4 bg-white dark:bg-[#181C26] rounded-2xl px-5 py-3.5 shadow-xl border border-[#F2F2F7] dark:border-slate-800 flex items-center justify-between gap-3 shrink-0">
         <div className="flex items-center gap-2">
-          <FileText className="w-5 h-5 text-[#007AFF]" />
-          <h2 className="text-sm sm:text-base font-bold text-[#1C1C1E]">Print / Export Document</h2>
+          <FileText className="w-5 h-5 text-[#007AFF] dark:text-[#38BDF8]" />
+          <h2 className="text-sm sm:text-base font-bold text-[#1C1C1E] dark:text-white">Print / Export Document</h2>
         </div>
 
         <div className="flex items-center gap-2">
@@ -120,9 +120,9 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
             <button
               type="button"
               onClick={handleShare}
-              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-[#1C1C1E] bg-[#F2F2F7] hover:bg-[#E5E5EA] rounded-xl transition cursor-pointer min-h-[44px]"
+              className="inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-medium text-[#1C1C1E] dark:text-slate-200 bg-[#F2F2F7] dark:bg-slate-800 hover:bg-[#E5E5EA] dark:hover:bg-slate-700 rounded-xl transition cursor-pointer min-h-[44px]"
             >
-              <Share2 className="w-4 h-4 text-[#8E8E93]" />
+              <Share2 className="w-4 h-4 text-[#8E8E93] dark:text-slate-400" />
               <span>Share</span>
             </button>
           )}
@@ -139,7 +139,7 @@ export const PrintDocumentView: React.FC<PrintDocumentViewProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-2 text-[#8E8E93] hover:text-[#1C1C1E] hover:bg-[#F2F2F7] rounded-xl transition cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+            className="p-2 text-[#8E8E93] hover:text-[#1C1C1E] dark:hover:text-white hover:bg-[#F2F2F7] dark:hover:bg-slate-800 rounded-xl transition cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
             title="Close Preview"
             aria-label="Close"
           >

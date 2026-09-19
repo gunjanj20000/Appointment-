@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Appointment, ClinicSettings, Patient } from '../types';
 import { usePWAInstall } from '../hooks/usePWAInstall';
+import { ThemeSlider } from './ThemeSlider';
 import {
   Settings,
   Building,
@@ -20,7 +21,10 @@ import {
   Save,
   Globe,
   RefreshCw,
-  MessageSquare
+  MessageSquare,
+  Sun,
+  Moon,
+  Palette
 } from 'lucide-react';
 import { DEFAULT_TEMPLATES, renderMessageTemplate } from '../utils/messaging';
 import { WhatsAppIcon } from './icons/WhatsAppIcon';
@@ -140,18 +144,18 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   return (
     <div className="h-full flex flex-col min-h-0 overflow-hidden space-y-2.5">
       {/* Top Header Bar */}
-      <div className="bg-white rounded-xl p-2.5 sm:p-3 border border-[#F2F2F7] shadow-2xs shrink-0 flex items-center justify-between gap-2">
+      <div className="bg-white dark:bg-[#181C26] rounded-xl p-2.5 sm:p-3 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs shrink-0 flex items-center justify-between gap-2">
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <Settings className="w-4 h-4 text-[#007AFF]" />
-            <span className="text-sm font-bold text-[#1C1C1E]">Settings</span>
+            <Settings className="w-4 h-4 text-[#007AFF] dark:text-[#3898FF]" />
+            <span className="text-sm font-bold text-[#1C1C1E] dark:text-white">Settings</span>
           </div>
 
           <button
             type="button"
             onClick={handleCheckUpdate}
             disabled={isCheckingUpdate}
-            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#007AFF] bg-[#007AFF]/10 hover:bg-[#007AFF]/20 active:scale-95 disabled:opacity-60 rounded-lg transition cursor-pointer shrink-0"
+            className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-[#007AFF] dark:text-[#3898FF] bg-[#007AFF]/10 dark:bg-[#007AFF]/20 hover:bg-[#007AFF]/20 active:scale-95 disabled:opacity-60 rounded-lg transition cursor-pointer shrink-0"
             title="Check for app updates & apply newest code changes"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isCheckingUpdate ? 'animate-spin' : ''}`} />
@@ -175,85 +179,97 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </button>
       </div>
 
-
       {/* Settings Form & Sections in bounded scrollable area */}
       <div className="flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-0.5">
+        {/* Appearance & Display Theme Section */}
+        <div className="bg-white dark:bg-[#181C26] rounded-xl p-3 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs space-y-2.5">
+          <div className="flex items-center justify-between border-b border-[#F2F2F7] dark:border-slate-800 pb-1.5 flex-wrap gap-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1C1E] dark:text-white">
+              <Palette className="w-3.5 h-3.5 text-[#007AFF] dark:text-[#3898FF]" />
+              <span>Appearance & Display Theme</span>
+            </div>
+            <ThemeSlider variant="segmented" />
+          </div>
+
+          <ThemeSlider variant="detailed" />
+        </div>
+
         {/* Clinic Letterhead Info */}
-        <div className="bg-white rounded-xl p-3 border border-[#F2F2F7] shadow-2xs space-y-2.5">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1C1E] border-b border-[#F2F2F7] pb-1.5">
-            <Building className="w-3.5 h-3.5 text-[#007AFF]" />
+        <div className="bg-white dark:bg-[#181C26] rounded-xl p-3 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs space-y-2.5">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1C1E] dark:text-white border-b border-[#F2F2F7] dark:border-slate-800 pb-1.5">
+            <Building className="w-3.5 h-3.5 text-[#007AFF] dark:text-[#3898FF]" />
             <span>Clinic Details & Header</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             <div>
-              <label className="block text-[11px] font-semibold text-[#8E8E93] mb-0.5">Clinic Name</label>
+              <label className="block text-[11px] font-semibold text-[#8E8E93] dark:text-slate-400 mb-0.5">Clinic Name</label>
               <input
                 type="text"
                 placeholder="e.g. City Central Medical Clinic"
                 value={formData.clinicName}
                 onChange={(e) => handleFormChange('clinicName', e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E]"
+                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] dark:border-slate-700 bg-[#F2F2F7] dark:bg-[#212632] focus:border-[#007AFF] focus:bg-white dark:focus:bg-[#1B202B] outline-hidden text-[#1C1C1E] dark:text-white"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#8E8E93] mb-0.5">Doctor / Physician</label>
+              <label className="block text-[11px] font-semibold text-[#8E8E93] dark:text-slate-400 mb-0.5">Doctor / Physician</label>
               <input
                 type="text"
                 placeholder="e.g. Dr. Jordan Reed, MD"
                 value={formData.doctorName}
                 onChange={(e) => handleFormChange('doctorName', e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E]"
+                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] dark:border-slate-700 bg-[#F2F2F7] dark:bg-[#212632] focus:border-[#007AFF] focus:bg-white dark:focus:bg-[#1B202B] outline-hidden text-[#1C1C1E] dark:text-white"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#8E8E93] mb-0.5">Specialty / Department</label>
+              <label className="block text-[11px] font-semibold text-[#8E8E93] dark:text-slate-400 mb-0.5">Specialty / Department</label>
               <input
                 type="text"
                 placeholder="e.g. General Practice"
                 value={formData.specialty}
                 onChange={(e) => handleFormChange('specialty', e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E]"
+                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] dark:border-slate-700 bg-[#F2F2F7] dark:bg-[#212632] focus:border-[#007AFF] focus:bg-white dark:focus:bg-[#1B202B] outline-hidden text-[#1C1C1E] dark:text-white"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-semibold text-[#8E8E93] mb-0.5">Phone Number</label>
+              <label className="block text-[11px] font-semibold text-[#8E8E93] dark:text-slate-400 mb-0.5">Phone Number</label>
               <input
                 type="text"
                 placeholder="e.g. +91 98765 43210"
                 value={formData.phone}
                 onChange={(e) => handleFormChange('phone', e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E]"
+                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] dark:border-slate-700 bg-[#F2F2F7] dark:bg-[#212632] focus:border-[#007AFF] focus:bg-white dark:focus:bg-[#1B202B] outline-hidden text-[#1C1C1E] dark:text-white"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-[11px] font-semibold text-[#8E8E93] mb-0.5">Address</label>
+              <label className="block text-[11px] font-semibold text-[#8E8E93] dark:text-slate-400 mb-0.5">Address</label>
               <input
                 type="text"
                 placeholder="e.g. Suite 400, 120 Medical Boulevard"
                 value={formData.address}
                 onChange={(e) => handleFormChange('address', e.target.value)}
-                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E]"
+                className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] dark:border-slate-700 bg-[#F2F2F7] dark:bg-[#212632] focus:border-[#007AFF] focus:bg-white dark:focus:bg-[#1B202B] outline-hidden text-[#1C1C1E] dark:text-white"
               />
             </div>
           </div>
         </div>
 
         {/* SMS & WhatsApp Messaging Settings */}
-        <div className="bg-white rounded-xl p-3 border border-[#F2F2F7] shadow-2xs space-y-3">
-          <div className="flex items-center justify-between border-b border-[#F2F2F7] pb-1.5 flex-wrap gap-2">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1C1E]">
-              <MessageSquare className="w-3.5 h-3.5 text-[#007AFF]" />
+        <div className="bg-white dark:bg-[#181C26] rounded-xl p-3 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs space-y-3">
+          <div className="flex items-center justify-between border-b border-[#F2F2F7] dark:border-slate-800 pb-1.5 flex-wrap gap-2">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1C1E] dark:text-white">
+              <MessageSquare className="w-3.5 h-3.5 text-[#007AFF] dark:text-[#3898FF]" />
               <span>SMS & WhatsApp Patient Messaging</span>
             </div>
             <button
               type="button"
               onClick={handleResetTemplates}
-              className="text-[11px] font-semibold text-[#007AFF] hover:underline cursor-pointer"
+              className="text-[11px] font-semibold text-[#007AFF] dark:text-[#3898FF] hover:underline cursor-pointer"
             >
               Reset Templates to Default
             </button>
@@ -262,27 +278,27 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           {/* Default Country Code */}
           <div>
             <div className="flex items-center justify-between mb-0.5">
-              <label className="block text-[11px] font-semibold text-[#8E8E93]">
+              <label className="block text-[11px] font-semibold text-[#8E8E93] dark:text-slate-400">
                 Default Country Code (for phone numbers without country code)
               </label>
-              <span className="text-[10px] text-[#8E8E93]">Default: +91 (India) • Always used unless changed by operator</span>
+              <span className="text-[10px] text-[#8E8E93] dark:text-slate-500">Default: +91 (India) • Always used unless changed by operator</span>
             </div>
             <input
               type="text"
               placeholder="+91"
               value={formData.defaultCountryCode || '+91'}
               onChange={(e) => handleFormChange('defaultCountryCode', e.target.value)}
-              className="w-full sm:w-48 px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E]"
+              className="w-full sm:w-48 px-2.5 py-1.5 text-xs rounded-lg border border-[#E5E5EA] dark:border-slate-700 bg-[#F2F2F7] dark:bg-[#212632] focus:border-[#007AFF] focus:bg-white dark:focus:bg-[#1B202B] outline-hidden text-[#1C1C1E] dark:text-white"
             />
           </div>
 
           {/* Template Tabs */}
           <div>
             <div className="flex items-center justify-between mb-1.5 flex-wrap gap-1">
-              <label className="block text-[11px] font-semibold text-[#8E8E93]">
+              <label className="block text-[11px] font-semibold text-[#8E8E93] dark:text-slate-400">
                 Message Templates
               </label>
-              <div className="flex items-center gap-1 bg-[#F2F2F7] p-0.5 rounded-lg">
+              <div className="flex items-center gap-1 bg-[#F2F2F7] dark:bg-[#212632] p-0.5 rounded-lg">
                 {(['reminder', 'confirmation', 'queue', 'cancellation'] as const).map((tab) => (
                   <button
                     key={tab}
@@ -290,8 +306,8 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                     onClick={() => setActiveTemplateTab(tab)}
                     className={`px-2 py-0.5 rounded-md text-[11px] font-semibold capitalize transition cursor-pointer ${
                       activeTemplateTab === tab
-                        ? 'bg-white text-[#007AFF] shadow-2xs font-bold'
-                        : 'text-[#8E8E93] hover:text-[#1C1C1E]'
+                        ? 'bg-white dark:bg-slate-700 text-[#007AFF] dark:text-[#3898FF] shadow-2xs font-bold'
+                        : 'text-[#8E8E93] dark:text-slate-400 hover:text-[#1C1C1E] dark:hover:text-white'
                     }`}
                   >
                     {tab === 'queue' ? 'Queue Alert' : tab}
@@ -323,12 +339,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                     : 'smsCancelledTemplate';
                 handleFormChange(key, e.target.value);
               }}
-              className="w-full p-2.5 text-xs leading-relaxed rounded-lg border border-[#E5E5EA] bg-[#F2F2F7] focus:border-[#007AFF] focus:bg-white outline-hidden text-[#1C1C1E] resize-y font-mono"
+              className="w-full p-2.5 text-xs leading-relaxed rounded-lg border border-[#E5E5EA] dark:border-slate-700 bg-[#F2F2F7] dark:bg-[#212632] focus:border-[#007AFF] focus:bg-white dark:focus:bg-[#1B202B] outline-hidden text-[#1C1C1E] dark:text-white resize-y font-mono"
             />
 
             {/* Placeholders Tag Bar */}
             <div className="mt-1.5 flex items-center gap-1 flex-wrap">
-              <span className="text-[10px] text-[#8E8E93] mr-0.5">Click tag to insert:</span>
+              <span className="text-[10px] text-[#8E8E93] dark:text-slate-500 mr-0.5">Click tag to insert:</span>
               {[
                 '{patient_name}',
                 '{date}',
@@ -344,7 +360,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                   key={ph}
                   type="button"
                   onClick={() => handleInsertPlaceholder(ph)}
-                  className="px-1.5 py-0.5 bg-[#F2F2F7] hover:bg-[#007AFF]/15 text-[#007AFF] text-[10px] font-mono rounded cursor-pointer transition"
+                  className="px-1.5 py-0.5 bg-[#F2F2F7] dark:bg-slate-800 hover:bg-[#007AFF]/15 dark:hover:bg-[#007AFF]/25 text-[#007AFF] dark:text-[#3898FF] text-[10px] font-mono rounded cursor-pointer transition"
                   title={`Insert ${ph}`}
                 >
                   {ph}
@@ -353,11 +369,11 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </div>
 
             {/* Live Rendered Preview */}
-            <div className="mt-2.5 p-2.5 bg-[#F8F9FA] rounded-lg border border-[#F2F2F7]">
-              <span className="text-[10px] font-bold text-[#8E8E93] uppercase tracking-wider block mb-1">
+            <div className="mt-2.5 p-2.5 bg-[#F8F9FA] dark:bg-[#131720] rounded-lg border border-[#F2F2F7] dark:border-slate-800">
+              <span className="text-[10px] font-bold text-[#8E8E93] dark:text-slate-400 uppercase tracking-wider block mb-1">
                 Sample Patient Message Preview:
               </span>
-              <p className="text-[11px] text-[#1C1C1E] whitespace-pre-line leading-relaxed bg-white p-2 rounded border border-[#E5E5EA]">
+              <p className="text-[11px] text-[#1C1C1E] dark:text-slate-100 whitespace-pre-line leading-relaxed bg-white dark:bg-[#1E2330] p-2 rounded border border-[#E5E5EA] dark:border-slate-700">
                 {renderMessageTemplate(
                   activeTemplateTab === 'confirmation'
                     ? formData.smsConfirmationTemplate ?? DEFAULT_TEMPLATES.confirmation
@@ -381,9 +397,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </div>
 
         {/* Print Reports Bar */}
-        <div className="bg-white rounded-xl p-3 border border-[#F2F2F7] shadow-2xs space-y-2">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1C1E]">
-            <Printer className="w-3.5 h-3.5 text-[#007AFF]" />
+        <div className="bg-white dark:bg-[#181C26] rounded-xl p-3 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs space-y-2">
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1C1E] dark:text-white">
+            <Printer className="w-3.5 h-3.5 text-[#007AFF] dark:text-[#3898FF]" />
             <span>Print Reports</span>
           </div>
 
@@ -391,21 +407,21 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <button
               type="button"
               onClick={() => onOpenPrint('today')}
-              className="py-2 px-2 text-center rounded-lg bg-[#F2F2F7] hover:bg-[#E5E5EA] text-xs font-medium text-[#1C1C1E] transition cursor-pointer min-h-[32px]"
+              className="py-2 px-2 text-center rounded-lg bg-[#F2F2F7] dark:bg-slate-800 hover:bg-[#E5E5EA] dark:hover:bg-slate-700 text-xs font-medium text-[#1C1C1E] dark:text-white transition cursor-pointer min-h-[32px]"
             >
               Today's Roster
             </button>
             <button
               type="button"
               onClick={() => onOpenPrint('upcoming')}
-              className="py-2 px-2 text-center rounded-lg bg-[#F2F2F7] hover:bg-[#E5E5EA] text-xs font-medium text-[#1C1C1E] transition cursor-pointer min-h-[32px]"
+              className="py-2 px-2 text-center rounded-lg bg-[#F2F2F7] dark:bg-slate-800 hover:bg-[#E5E5EA] dark:hover:bg-slate-700 text-xs font-medium text-[#1C1C1E] dark:text-white transition cursor-pointer min-h-[32px]"
             >
               Schedule
             </button>
             <button
               type="button"
               onClick={() => onOpenPrint('patients')}
-              className="py-2 px-2 text-center rounded-lg bg-[#F2F2F7] hover:bg-[#E5E5EA] text-xs font-medium text-[#1C1C1E] transition cursor-pointer min-h-[32px]"
+              className="py-2 px-2 text-center rounded-lg bg-[#F2F2F7] dark:bg-slate-800 hover:bg-[#E5E5EA] dark:hover:bg-slate-700 text-xs font-medium text-[#1C1C1E] dark:text-white transition cursor-pointer min-h-[32px]"
             >
               Patients
             </button>
@@ -413,19 +429,19 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </div>
 
         {/* Database & Backup */}
-        <div className="bg-white rounded-xl p-3 border border-[#F2F2F7] shadow-2xs space-y-2.5">
+        <div className="bg-white dark:bg-[#181C26] rounded-xl p-3 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs space-y-2.5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1C1E]">
-              <Database className="w-3.5 h-3.5 text-[#007AFF]" />
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1C1E] dark:text-white">
+              <Database className="w-3.5 h-3.5 text-[#007AFF] dark:text-[#3898FF]" />
               <span>Data & Backup (IndexedDB)</span>
             </div>
-            <span className="text-[11px] text-[#8E8E93]">
+            <span className="text-[11px] text-[#8E8E93] dark:text-slate-400">
               {appointments.length} apts • {patients.length} patients
             </span>
           </div>
 
           {importStatus && (
-            <div className="p-2 bg-[#007AFF]/10 text-[#007AFF] rounded-lg text-xs font-medium">
+            <div className="p-2 bg-[#007AFF]/10 dark:bg-[#007AFF]/20 text-[#007AFF] dark:text-[#3898FF] rounded-lg text-xs font-medium">
               {importStatus}
             </div>
           )}
@@ -434,9 +450,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <button
               type="button"
               onClick={onExportBackup}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#1C1C1E] text-xs font-medium rounded-lg transition cursor-pointer min-h-[32px]"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F2F2F7] dark:bg-slate-800 hover:bg-[#E5E5EA] dark:hover:bg-slate-700 text-[#1C1C1E] dark:text-white text-xs font-medium rounded-lg transition cursor-pointer min-h-[32px]"
             >
-              <Download className="w-3.5 h-3.5 text-[#8E8E93]" />
+              <Download className="w-3.5 h-3.5 text-[#8E8E93] dark:text-slate-400" />
               <span>Export JSON</span>
             </button>
 
@@ -450,16 +466,16 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#1C1C1E] text-xs font-medium rounded-lg transition cursor-pointer min-h-[32px]"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F2F2F7] dark:bg-slate-800 hover:bg-[#E5E5EA] dark:hover:bg-slate-700 text-[#1C1C1E] dark:text-white text-xs font-medium rounded-lg transition cursor-pointer min-h-[32px]"
             >
-              <Upload className="w-3.5 h-3.5 text-[#8E8E93]" />
+              <Upload className="w-3.5 h-3.5 text-[#8E8E93] dark:text-slate-400" />
               <span>Import JSON</span>
             </button>
 
             <button
               type="button"
               onClick={onClearDatabase}
-              className="ml-auto px-3 py-1.5 text-xs font-medium text-[#FF3B30] hover:bg-[#FFEBEA] rounded-lg transition cursor-pointer min-h-[32px]"
+              className="ml-auto px-3 py-1.5 text-xs font-medium text-[#FF3B30] dark:text-rose-400 hover:bg-[#FFEBEA] dark:hover:bg-rose-950/30 rounded-lg transition cursor-pointer min-h-[32px]"
             >
               Reset Database
             </button>
@@ -468,9 +484,9 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
 
         {/* PWA Install Notice if available */}
         {isInstallable && (
-          <div className="bg-white rounded-xl p-3 border border-[#F2F2F7] shadow-2xs flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 text-xs text-[#1C1C1E]">
-              <Smartphone className="w-3.5 h-3.5 text-[#007AFF]" />
+          <div className="bg-white dark:bg-[#181C26] rounded-xl p-3 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 text-xs text-[#1C1C1E] dark:text-white">
+              <Smartphone className="w-3.5 h-3.5 text-[#007AFF] dark:text-[#3898FF]" />
               <span className="font-semibold">Install App to Home Screen</span>
             </div>
             <button
@@ -484,17 +500,17 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         )}
 
         {/* About Appointment Buddy */}
-        <div className="bg-white rounded-xl p-3.5 border border-[#F2F2F7] shadow-2xs flex items-center justify-between gap-3">
+        <div className="bg-white dark:bg-[#181C26] rounded-xl p-3.5 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl ring-2 ring-[#007AFF]/20 p-0.5 bg-white shrink-0 overflow-hidden shadow-xs">
+            <div className="w-10 h-10 rounded-xl ring-2 ring-[#007AFF]/20 p-0.5 bg-white dark:bg-slate-800 shrink-0 overflow-hidden shadow-xs">
               <img src={appLogo} alt="Appointment Buddy" className="w-full h-full object-cover rounded-[10px]" />
             </div>
             <div>
-              <h4 className="text-xs font-bold text-[#1C1C1E] font-brand">Appointment Buddy</h4>
-              <p className="text-[10px] text-[#8E8E93]">Version 1.0 • Offline-Ready Clinical Practice Organizer</p>
+              <h4 className="text-xs font-bold text-[#1C1C1E] dark:text-white font-brand">Appointment Buddy</h4>
+              <p className="text-[10px] text-[#8E8E93] dark:text-slate-400">Version 1.0 • Offline-Ready Clinical Practice Organizer</p>
             </div>
           </div>
-          <span className="text-[10px] font-semibold text-[#007AFF] bg-[#007AFF]/10 px-2 py-0.5 rounded-full">
+          <span className="text-[10px] font-semibold text-[#007AFF] dark:text-[#3898FF] bg-[#007AFF]/10 dark:bg-[#007AFF]/20 px-2 py-0.5 rounded-full">
             Active
           </span>
         </div>
