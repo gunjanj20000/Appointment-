@@ -3,6 +3,20 @@
 @theme {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-brand: 'Outfit', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Slightly increased font sizes across the app */
+  --text-xs: 0.8125rem; /* ~13px (was 12px) */
+  --text-xs--line-height: calc(1.15 / 0.8125);
+  --text-sm: 0.9375rem; /* ~15px (was 14px) */
+  --text-sm--line-height: calc(1.35 / 0.9375);
+  --text-base: 1.0625rem; /* ~17px (was 16px) */
+  --text-base--line-height: 1.5;
+  --text-lg: 1.1875rem; /* ~19px (was 18px) */
+  --text-lg--line-height: calc(1.75 / 1.1875);
+  --text-xl: 1.3125rem; /* ~21px (was 20px) */
+  --text-xl--line-height: calc(1.85 / 1.3125);
+  --text-2xl: 1.5625rem; /* ~25px (was 24px) */
+  --text-2xl--line-height: calc(2.1 / 1.5625);
 }
 
 @layer base {
@@ -29,6 +43,43 @@
   input, textarea, select, button {
     font-family: inherit;
   }
+
+  /* Slightly increased font sizes for small arbitrary classes across the app */
+  .text-\[10px\] {
+    font-size: 11.5px !important;
+  }
+
+  .text-\[11px\] {
+    font-size: 12.5px !important;
+  }
+}
+
+/* Animation for KJ icon when clicked to increase slightly */
+@keyframes kj-bounce-scale {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 1px 3px rgba(0, 122, 255, 0.15);
+  }
+  35% {
+    transform: scale(1.24);
+    box-shadow: 0 8px 24px rgba(0, 122, 255, 0.4);
+  }
+  65% {
+    transform: scale(1.12);
+    box-shadow: 0 4px 14px rgba(0, 122, 255, 0.28);
+  }
+  85% {
+    transform: scale(1.18);
+    box-shadow: 0 6px 18px rgba(0, 122, 255, 0.35);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 1px 3px rgba(0, 122, 255, 0.15);
+  }
+}
+
+.animate-kj-bounce {
+  animation: kj-bounce-scale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 /* iOS Safe Area Utilities */

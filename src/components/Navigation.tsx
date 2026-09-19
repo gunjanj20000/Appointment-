@@ -31,6 +31,14 @@ export const Navigation: React.FC<NavigationProps> = ({
 }) => {
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
   const [showIOSModal, setShowIOSModal] = useState(false);
+  const [isLogoAnimating, setIsLogoAnimating] = useState(false);
+
+  const handleLogoClick = () => {
+    setIsLogoAnimating(false);
+    requestAnimationFrame(() => {
+      setIsLogoAnimating(true);
+    });
+  };
 
   const tabs: { id: ScreenTab; label: string; icon: React.FC<{ className?: string }> }[] = [
     { id: 'today', label: 'Today', icon: CalendarDays },
@@ -127,15 +135,18 @@ export const Navigation: React.FC<NavigationProps> = ({
             <div className="flex items-center pl-1.5 sm:pl-2 border-l border-[#E5E5EA]">
               <button
                 type="button"
-                onClick={() => onTabChange('settings')}
-                className="relative p-0.5 rounded-full ring-2 ring-[#007AFF]/30 hover:ring-[#007AFF] shadow-sm transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer shrink-0 bg-white"
-                title="Appointment Buddy Settings & Clinic Profile"
-                aria-label="Appointment Buddy Settings and Clinic Profile"
+                onClick={handleLogoClick}
+                onAnimationEnd={() => setIsLogoAnimating(false)}
+                className={`relative p-0.5 rounded-full ring-2 ring-[#007AFF]/30 hover:ring-[#007AFF] shadow-xs transition-transform duration-200 hover:scale-105 active:scale-115 cursor-pointer shrink-0 bg-white select-none ${
+                  isLogoAnimating ? 'animate-kj-bounce' : ''
+                }`}
+                title="Appointment Buddy"
+                aria-label="Appointment Buddy"
               >
                 <img
                   src={appLogo}
                   alt="Appointment Buddy Logo"
-                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover block"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover block pointer-events-none"
                 />
               </button>
             </div>
