@@ -500,19 +500,24 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         )}
 
         {/* About Appointment Buddy */}
-        <div className="bg-white dark:bg-[#181C26] rounded-xl p-3.5 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl ring-2 ring-[#007AFF]/20 p-0.5 bg-white dark:bg-slate-800 shrink-0 overflow-hidden shadow-xs">
-              <img src={appLogo} alt="Appointment Buddy" className="w-full h-full object-cover rounded-[10px]" />
+        <div className="bg-white dark:bg-[#181C26] rounded-xl p-3.5 border border-[#F2F2F7] dark:border-slate-800 shadow-2xs space-y-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl ring-2 ring-[#007AFF]/20 p-0.5 bg-white dark:bg-slate-800 shrink-0 overflow-hidden shadow-xs">
+                <img src={appLogo} alt="Appointment Buddy" className="w-full h-full object-cover rounded-[10px]" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-[#1C1C1E] dark:text-white font-brand">Appointment Buddy</h4>
+                <p className="text-[10px] text-[#8E8E93] dark:text-slate-400">Version 1.0 • Offline-Ready Clinical Practice Organizer</p>
+              </div>
             </div>
-            <div>
-              <h4 className="text-xs font-bold text-[#1C1C1E] dark:text-white font-brand">Appointment Buddy</h4>
-              <p className="text-[10px] text-[#8E8E93] dark:text-slate-400">Version 1.0 • Offline-Ready Clinical Practice Organizer</p>
-            </div>
+            <span className="text-[10px] font-semibold text-[#007AFF] dark:text-[#3898FF] bg-[#007AFF]/10 dark:bg-[#007AFF]/20 px-2 py-0.5 rounded-full shrink-0">
+              Active
+            </span>
           </div>
-          <span className="text-[10px] font-semibold text-[#007AFF] dark:text-[#3898FF] bg-[#007AFF]/10 dark:bg-[#007AFF]/20 px-2 py-0.5 rounded-full">
-            Active
-          </span>
+          <div className="pt-2.5 border-t border-[#F2F2F7] dark:border-slate-800 text-[11px] text-[#8E8E93] dark:text-slate-400">
+            © 2026 Kushal Jangid MD,DNB.All rights reserved
+          </div>
         </div>
       </div>
     </div>
