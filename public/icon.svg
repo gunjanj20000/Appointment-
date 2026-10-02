@@ -1,21 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="medGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#0d9488" />
-      <stop offset="100%" stop-color="#0f766e" />
+    <!-- Background Gradient: Deep Royal Blue -> Electric Blue -> Medical Teal -->
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0051C7" />
+      <stop offset="50%" stop-color="#007AFF" />
+      <stop offset="100%" stop-color="#00A896" />
     </linearGradient>
-    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#0f172a" flood-opacity="0.2"/>
+
+    <!-- Top Gloss Highlight -->
+    <linearGradient id="glossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28" />
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.05" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Pulse Line Gradient -->
+    <linearGradient id="pulseGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0066E0" />
+      <stop offset="50%" stop-color="#007AFF" />
+      <stop offset="100%" stop-color="#00A896" />
+    </linearGradient>
+
+    <!-- Cross Shadow -->
+    <filter id="cardShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#002255" flood-opacity="0.32" />
+    </filter>
+
+    <!-- Inner Subtle Shadow -->
+    <filter id="subtleGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.12" />
     </filter>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#medGrad)" />
-  <!-- Medical Cross -->
-  <g filter="url(#shadow)">
-    <!-- Vertical Bar with rounded ends -->
-    <rect x="206" y="96" width="100" height="320" rx="30" fill="#ffffff" />
-    <!-- Horizontal Bar with rounded ends -->
-    <rect x="96" y="206" width="320" height="100" rx="30" fill="#ffffff" />
+
+  <!-- Background squircle (or full bleed if maskable) -->
+  <rect width="512" height="512" rx="116" fill="url(#brandGrad)" />
+
+  <!-- Top Glass Highlight Overlay -->
+  <rect width="512" height="256" rx="116" fill="url(#glossGrad)" />
+
+  <!-- App Icon Content -->
+  <g filter="url(#cardShadow)">
+    <!-- White Medical Cross with soft rounded edges -->
+    <rect x="206" y="96" width="100" height="320" rx="32" fill="#FFFFFF" />
+    <rect x="96" y="206" width="320" height="100" rx="32" fill="#FFFFFF" />
+
+    <!-- Center Pulse / Heartbeat Line Wave Accent -->
+    <g filter="url(#subtleGlow)">
+      <path d="M142 256 h54 l18 -36 l24 72 l22 -48 l16 12 h94" 
+            fill="none" 
+            stroke="url(#pulseGrad)" 
+            stroke-width="15" 
+            stroke-linecap="round" 
+            stroke-linejoin="round" />
+      <!-- Center subtle pulse dot indicator -->
+      <circle cx="256" cy="256" r="6" fill="#00A896" />
+    </g>
   </g>
-  <!-- Stethoscope / Pulse Accent in center -->
-  <path d="M190 256h25l15-28 22 56 18-36 12 8h40" fill="none" stroke="#0d9488" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

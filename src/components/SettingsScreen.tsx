@@ -29,6 +29,7 @@ import {
 import { DEFAULT_TEMPLATES, renderMessageTemplate } from '../utils/messaging';
 import { WhatsAppIcon } from './icons/WhatsAppIcon';
 import appLogo from '../assets/app-logo.png';
+import appIcon from '../assets/app-icon.png';
 
 
 interface SettingsScreenProps {
@@ -504,7 +505,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl ring-2 ring-[#007AFF]/20 p-0.5 bg-white dark:bg-slate-800 shrink-0 overflow-hidden shadow-xs">
-                <img src={appLogo} alt="Appointment Buddy" className="w-full h-full object-cover rounded-[10px]" />
+                <img src={appIcon} alt="Appointment Buddy" className="w-full h-full object-cover rounded-[10px]" />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-[#1C1C1E] dark:text-white font-brand">Appointment Buddy</h4>
